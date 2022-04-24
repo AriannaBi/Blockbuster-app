@@ -21,60 +21,73 @@ public class User {
         return name;
     }
 
-    public int numberOfRentals() {
+
+    public int getNumberOfRentals() {
         return rentals.size();
     }
 
-    /**
-     * Return if the user has ever lost a movie.
-     * @return true if user had lost a movie, false if user had never lost a movie
-     */
-    public boolean hasLostMovie() {
-        return true;
+
+    public boolean getLostMovie() {
+        return lostMovie;
     }
 
-    public void setLostMovie() {
-        lostMovie = true;
-    }
+//    /**
+//     *  A user can rent a movie
+//     * @param rent the rent with start date, end date and movie
+//     */
+//    public void rentMovie(Rent rent) {
+//        rentals.add(rent);
+//    }
 
     /**
-     * A user can rent a movie
-     * @param movie is the object movie
-     * @return the object rent
+     *  A user can rent a movie
+//     * @param rent the rent with start date, end date and movie
      */
-    public Rent rentMovie(Movie movie, LocalDate start) {
-        boolean hasDeposit = depositYerOrNo(movie);
-        Rent rent = new Rent(movie, LocalDate.now(), hasDeposit);
+    public void rentMovie(Movie movie, LocalDate start, LocalDate end) {
+        Rent rent = new Rent(movie, this, start, end);
         rentals.add(rent);
-        return rent;
+    }
+
+    public Rent getRent(Movie movie) {
+        for (Rent rent: rentals) {
+            if (Objects.equals(rent.getTitleMovie(), movie.getTitle())) {
+                return rent;
+            }
+        }
+        return null;
     }
 
     /**
      * Return to the blockbuster the movie and end the rent.
      * Find the movie among all the rentals, compute the fee to pay if the movie was turned late,
-     * and decide to give back the deposit or not
-     * @param movie
-     * @param end
-     * @return
+     * and decide to give back the deposit or not.
+     * @param movie a movie
+     * @param end end date of rent
+     * @return price to pay as additional fees after rent (for late return)
      */
     public float returnMovie(Movie movie, LocalDate end) {
-//        find the movie 
-//        compute the rimanent rent for being late and the deposit to return or not return
-//        remove movie from list rent
+        float additionalPrice = 0;
         for (Rent rent: rentals) {
             if (Objects.equals(rent.getTitleMovie(), movie.getTitle())) {
-                rent.computeAdditionalLatePriceRent(end);
-                rent.computeAdditionalLateDeposit(end);
+                additionalPrice += rent.computeAdditionalLatePrice(end);
             }
         }
-
-        return 0;
-
+        return additionalPrice;
     }
 
-    private boolean depositYerOrNo(Movie movie) {
-        return movie.isStandard() && !lostMovie && numberOfRentals() >= 3;
+    /**
+     * if the user has lost a movie, the rent is end, but he still needs to pay the rent's and deposit's
+     * additional fees if it was returned late.
+     * @param movie movie
+     * @param end end date of rental
+     * @return the price to pay
+     */
+    public float setLostMovie(Movie movie, LocalDate end) {
+        lostMovie = true;
+        return returnMovie(movie, end);
     }
+
+
 
 
 }
