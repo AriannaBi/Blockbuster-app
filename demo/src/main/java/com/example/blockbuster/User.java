@@ -3,13 +3,19 @@ package com.example.blockbuster;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document("user")
 public class User {
 
-    private final String name;
+    @Id
+    public String id;
+    private String name;
     private boolean lostMovie;
     private ArrayList<Rent> rentals;
 
+//    public User() {}
 
     public User(String name) {
         this.name = name;
@@ -21,23 +27,13 @@ public class User {
         return name;
     }
 
-
     public int getNumberOfRentals() {
         return rentals.size();
     }
 
-
     public boolean getLostMovie() {
         return lostMovie;
     }
-
-//    /**
-//     *  A user can rent a movie
-//     * @param rent the rent with start date, end date and movie
-//     */
-//    public void rentMovie(Rent rent) {
-//        rentals.add(rent);
-//    }
 
     /**
      *  A user can rent a movie
@@ -48,7 +44,7 @@ public class User {
         rentals.add(rent);
     }
 
-    public Rent getRent(Movie movie) {
+    public Rent getRental(Movie movie) {
         for (Rent rent: rentals) {
             if (Objects.equals(rent.getTitleMovie(), movie.getTitle())) {
                 return rent;
@@ -86,8 +82,6 @@ public class User {
         lostMovie = true;
         return returnMovie(movie, end);
     }
-
-
 
 
 }

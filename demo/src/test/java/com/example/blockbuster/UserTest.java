@@ -72,8 +72,8 @@ public class UserTest {
         assertEquals(0, actualAdditionalPrice, "Error in compute late price rent and deposit");
 
 
-        Rent rent1 = user1.getRent(movie1); //3
-        Rent rent2 = user1.getRent(movie2); //4
+        Rent rent1 = user1.getRental(movie1); //3
+        Rent rent2 = user1.getRental(movie2); //4
         assertEquals("Men in Black", rent1.getMovieTitle(), "Error Title rent  wrong");
         assertEquals("The Batman", rent2.getMovieTitle(), "Error Title rent wrong");
         assertEquals(12, rent1.getPrice(), "Error: price of total rent not correct");
@@ -83,7 +83,7 @@ public class UserTest {
         user1.rentMovie(movie3, today, todayPlus2); //2
         float additionalPrice = user1.returnMovie(movie3, todayPlus2);
         assertEquals(0, additionalPrice, "Error in compute late price rent and deposit");
-        Rent rent3 = user1.getRent(movie3); //2
+        Rent rent3 = user1.getRental(movie3); //2
         assertEquals(10, rent3.getPrice(), "Error: price of total rent not correct");
 
 
@@ -96,8 +96,8 @@ public class UserTest {
         user1.rentMovie(movie1, today, todayPlus3); //3
         user1.rentMovie(movie2, today, todayPlus4); //4
         float actualAdditionalPrice = user1.returnMovie(movie2, todayPlus7);
-        Rent rent1 = user1.getRent(movie1); //3
-        Rent rent2 = user1.getRent(movie2); //4
+        Rent rent1 = user1.getRental(movie1); //3
+        Rent rent2 = user1.getRental(movie2); //4
 
         float expectedAdditionalPrice = 3 * 2; // deposit to zero + 3 late days * 2
         assertEquals(expectedAdditionalPrice, actualAdditionalPrice, "Error in compute additional price for late return");
