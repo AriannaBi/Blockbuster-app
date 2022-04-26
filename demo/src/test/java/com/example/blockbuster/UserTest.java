@@ -20,9 +20,6 @@ public class UserTest {
     private Movie movie1;
     private Movie movie2;
     private Movie movie3;
-    private Rent rent1;
-    private Rent rent2;
-    private Rent rent3;
     private LocalDate today;
     private LocalDate todayPlus1;
     private LocalDate todayPlus2;

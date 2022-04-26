@@ -1,26 +1,32 @@
 package com.example.blockbuster;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+@Document("rent")
 public class Rent {
 
-    private final LocalDate start;
-    private final LocalDate end;
+    @Id
+    private String id;
+    private  LocalDate start;
+    private  LocalDate end;
     private float price; //initial rent and final rent
 //    private final float pricePerDay;
     // if deposit is > 0 is a debit, if deposit is < 0 is a credit
     private float deposit; //deposit to return
-    private final Movie movie;
+    private  Movie movie;
 
+
+    public Rent() {}
 
     public Rent(Movie movie, User user, LocalDate start, LocalDate end) {
         this.start = start;
         this.end = end;
         this.movie = movie;
         this.price = getPriceRentBasedOnMovieAndTime(movie);
-        System.out.println(movie.getTitle());
-        System.out.println(user.getNumberOfRentals());
         if (hasNotToPayInitialDeposit(movie.isStandard(), user.getLostMovie(), user.getNumberOfRentals())) {
             this.deposit = 0;
         } else {
@@ -35,6 +41,18 @@ public class Rent {
 
     public float getPrice() {
         return price - deposit;
+    }
+
+    public Movie getMovie() {
+        return this.movie;
+    }
+
+    public LocalDate getStart() {
+        return start;
+    }
+
+    public LocalDate getEnd() {
+        return end;
     }
 
     /**

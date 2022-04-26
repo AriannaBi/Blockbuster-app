@@ -2,6 +2,8 @@ package com.example.blockbuster;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,17 +12,26 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class User {
 
     @Id
-    public String id;
+    private String id;
     private String name;
     private boolean lostMovie;
     private ArrayList<Rent> rentals;
 
-//    public User() {}
 
     public User(String name) {
         this.name = name;
         lostMovie = false;
         rentals = new ArrayList<>();
+    }
+
+    public User() {}
+
+    public String getId() {
+        return id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getName() {
@@ -39,11 +50,17 @@ public class User {
      *  A user can rent a movie
 //     * @param rent the rent with start date, end date and movie
      */
-    public void rentMovie(Movie movie, LocalDate start, LocalDate end) {
+    public Rent rentMovie(Movie movie, LocalDate start, LocalDate end) {
         Rent rent = new Rent(movie, this, start, end);
         rentals.add(rent);
+        return rent;
     }
 
+    /**
+     * Return the single rental
+     * @param movie
+     * @return
+     */
     public Rent getRental(Movie movie) {
         for (Rent rent: rentals) {
             if (Objects.equals(rent.getTitleMovie(), movie.getTitle())) {
@@ -51,6 +68,14 @@ public class User {
             }
         }
         return null;
+    }
+
+    /**
+     * Return all the rentals
+     */
+    public ArrayList<Rent> getRentals() {
+//        return Collections.unmodifiableList(rentals);
+        return rentals;
     }
 
     /**
