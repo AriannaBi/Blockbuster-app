@@ -68,6 +68,16 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/user/{id}/rent")
+    public ResponseEntity<ArrayList<Rent>> getRentMovie(@PathVariable("id") String id) {
+        var optionalUser = userService.findById(id);
+        if (optionalUser.isPresent()){
+            var listRent = optionalUser.get().getRentals();
+            return ResponseEntity.ok(listRent);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @PostMapping("/user/{idUser}/rent/{idRent}/return")
     public ResponseEntity<Rent> returnMovie(@PathVariable("idUser") String idUser, @PathVariable("idRent") String idRent, @RequestBody UserReturnDTO userReturnDTO) {
         var optionalUser = userService.findById(idUser);
