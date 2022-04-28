@@ -15,6 +15,8 @@ public class UserRentDTO {
         this.end = end;
     }
 
+    public UserRentDTO() {}
+
     public String getMovieId() {
         return movieId;
     }

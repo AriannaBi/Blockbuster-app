@@ -1,6 +1,7 @@
 <script>
   import Router from "svelte-spa-router";
   import { routes } from "./routes.js";
+  import { Menu, Button, List, ListItem, MaterialApp } from 'svelte-materialify';
   export let name;
 </script>
 
@@ -12,17 +13,21 @@
       <ul>
         <li><a href="#/"> Home </a></li>
         <li><a href="#/user"> Utente </a></li>
-        <li><a href="#/rent"> Noleggio </a></li>
+        <li><a href="#/rent"> Lista noleggi </a></li>
         <li><a href="#/movie"> Aggiungi un film </a></li>
       </ul>
     </nav>
   </div>
-  <div>
+  <div id = "id_routes">
     <Router {routes} />
   </div>
 </main>
 
 <style>
+  #id_routes {
+    margin: auto;
+    width: 90%;
+  }
   main {
     text-align: center;
     padding: 1em;
@@ -55,11 +60,11 @@
   }
 
   nav {
-    position: fixed;
-    /* top: 50%; */
-    left: 50%;
-    /* bring your own prefixes */
-    transform: translate(-50%, -50%);
+    margin-top: 2%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: baseline;
   }
 
   

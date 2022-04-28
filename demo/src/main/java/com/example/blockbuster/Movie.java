@@ -10,11 +10,12 @@ import java.util.Objects;
 public class Movie {
     @Id
     private String id;
-    private final String title;
-    private final boolean standard;
-    private final boolean forChildren;
-    private final boolean newReleased;
+    private String title;
+    private boolean standard;
+    private boolean forChildren;
+    private boolean newReleased;
 
+    public Movie() {}
     public Movie(String title, boolean standard, boolean forChildren, boolean newReleased) {
         this.title = title;
         this.standard = standard;
@@ -34,6 +35,7 @@ public class Movie {
         }
     }
 
+    public String getId() { return id;}
 
     public boolean isStandard() {
         return standard;

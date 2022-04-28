@@ -49,10 +49,4 @@ public class RentController {
         return ResponseEntity.ok(listRent);
     }
 
-//    @GetMapping("/movie")
-//    public ResponseEntity<List<Movie>> findMovie() {
-//        var listMovie = movieService.findAll();
-//        return ResponseEntity.ok(listMovie);
-//    }
-
 }

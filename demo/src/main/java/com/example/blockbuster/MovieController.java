@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -36,9 +37,11 @@ public class MovieController {
     }
 
     @GetMapping("/movie")
-    public ResponseEntity<List<Movie>> findMovie() {
+    public ResponseEntity<List<MovieDTO>> findMovie() {
         var listMovie = movieService.findAll();
-        return ResponseEntity.ok(listMovie);
+        List<MovieDTO> listMovieDTO = new ArrayList<>();
+        movieService.findAll().forEach(elem -> listMovieDTO.add(new MovieDTO(elem.getId(), elem.getTitle(), elem.isStandard(), elem.isForChildren(), elem.isNewReleased())));
+        return ResponseEntity.ok(listMovieDTO);
     }
 
 }

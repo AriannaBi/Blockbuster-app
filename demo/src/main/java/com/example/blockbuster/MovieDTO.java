@@ -2,12 +2,14 @@ package com.example.blockbuster;
 
 public class MovieDTO {
 
+    private final String id;
     private final String title;
     private final boolean standard;
     private final boolean forChildren;
     private final boolean newReleased;
 
-    public MovieDTO(String title, boolean standard, boolean forChildren, boolean newReleased) {
+    public MovieDTO(String id, String title, boolean standard, boolean forChildren, boolean newReleased) {
+        this.id = id;
         this.title = title;
         this.standard = standard;
         this.forChildren = forChildren;
@@ -15,6 +17,8 @@ public class MovieDTO {
     }
 
 //    public MovieDTO() {}
+
+    public String getId() { return id; }
 
     public boolean isStandard() {
         return standard;

@@ -63,6 +63,7 @@ public class UserController {
             Rent rent = optionalUser.get().rentMovie(optionalMovie.get(),userRentDTO.getStart(),userRentDTO.getEnd());
             userService.create(optionalUser.get());
             rentService.create(rent);
+//            System.out.println(rent);
             return ResponseEntity.ok(rent);
         }
         return ResponseEntity.notFound().build();
@@ -71,9 +72,14 @@ public class UserController {
     @GetMapping("/user/{id}/rent")
     public ResponseEntity<ArrayList<Rent>> getRentMovie(@PathVariable("id") String id) {
         var optionalUser = userService.findById(id);
+//        System.out.println("AAA");
         if (optionalUser.isPresent()){
             var listRent = optionalUser.get().getRentals();
+//            System.out.println(listRent.get(0));
+
             return ResponseEntity.ok(listRent);
+
+//            return list of rent (movie, user, start, end)
         }
         return ResponseEntity.notFound().build();
     }

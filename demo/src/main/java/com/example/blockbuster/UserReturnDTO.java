@@ -9,6 +9,7 @@ public class UserReturnDTO {
     public UserReturnDTO(LocalDate start, LocalDate end) {
         this.end = end;
     }
+    public UserReturnDTO() {}
 
     public LocalDate getEnd() {
         return end;
