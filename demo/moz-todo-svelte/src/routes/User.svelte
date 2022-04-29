@@ -26,7 +26,12 @@
     find_user_label = false;
   }
 
+  let bad_request = false;
   async function create_user() {
+    console.log();
+    if (document.getElementById("textField_id").value == "") {
+      bad_request = true;
+    }
     login_label = true;
     find_user_label = false;
     const response = await fetch("http://localhost:8080/user", {
@@ -36,7 +41,9 @@
     });
     const data = await response.json();
     appear_log_in_with_name();
-    
+  }
+  async function try_new_rent() {
+    bad_request = false;
   }
 
   let name_;
@@ -80,16 +87,23 @@
   {/if}
 
   {#if show_post_user_label}
-    <div>
-      {#if !login_label}
-        <TextField solo bind:value={user_name} />
-        <Button type="button" on:click={create_user}>Post it</Button>
-      {/if}
-      <br />
-      {#if login_label}
-        <a href={`#/user/${user_id}`}> Log in as {name_}</a>
-      {/if}
-    </div>
+    {#if !bad_request}
+      <div>
+        {#if !login_label}
+          <TextField solo bind:value={user_name} id="textField_id" />
+          <Button type="button" on:click={create_user}>Post it</Button>
+        {/if}
+        <br />
+        {#if login_label}
+          <a href={`#/user/${user_id}`}> Log in as {name_}</a>
+        {/if}
+      </div>
+    {:else}
+      <p>BAD REQUEST: errore nell'inserire i dati</p>
+      <MaterialApp>
+        <Button on:click={try_new_rent}>Riprova</Button>
+      </MaterialApp>
+    {/if}
   {/if}
 </div>
 

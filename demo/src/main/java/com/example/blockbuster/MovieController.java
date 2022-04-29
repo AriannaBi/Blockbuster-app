@@ -22,12 +22,15 @@ public class MovieController {
     @PostMapping("/movie")
     public ResponseEntity<Movie> addMovie(@RequestBody Movie movieDTO) {
         Movie movie = new Movie(movieDTO.getTitle(), movieDTO.isStandard(), movieDTO.isForChildren(), movieDTO.isNewReleased());
-        List<Movie> listMovie = movieService.findAll();
-        for (Movie elem : listMovie) {
-            if (elem.equals(movie)) return ResponseEntity.badRequest().build();
+        if (movieDTO.isNewReleased() || movieDTO.isForChildren() || movieDTO.isStandard()) {
+            List<Movie> listMovie = movieService.findAll();
+            for (Movie elem : listMovie) {
+                if (elem.getTitle().equals(movie.getTitle())) return ResponseEntity.badRequest().build();
+            }
+            movieService.create(movie);
+            return ResponseEntity.ok(movie);
         }
-        movieService.create(movie);
-        return ResponseEntity.ok(movie);
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/movie/{id}")

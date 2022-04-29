@@ -35,6 +35,7 @@
   }
 
   async function create_rent() {
+    
     let user_id_current_url = document.URL.split("/")[5];
 
     const res = await fetch(`http://localhost:8080/movie`);
@@ -129,14 +130,14 @@
         <input type="date" bind:value={date_end} />
       </div>
 
-      <Button on:click={create_rent}>Post it</Button>
+      <Button  on:click={create_rent}>Post it</Button>
     </MaterialApp>
   {:else}
     <p>
-      BAD REQUEST: the starting date can not be earlier then the ending date
+      BAD REQUEST: errore nell'inserire i dati
     </p>
     <MaterialApp>
-      <Button on:click={try_new_rent}>Make a new rent</Button>
+      <Button on:click={try_new_rent}>Riprova</Button>
     </MaterialApp>
   {/if}
 </div>

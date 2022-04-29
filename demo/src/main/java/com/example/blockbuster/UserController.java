@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 //@RequestMapping()
@@ -27,6 +28,7 @@ public class UserController {
 
     @PostMapping("/user")
     public ResponseEntity<User> addUser(@RequestBody UserDTO userDTO) {
+        if (userDTO.getName() == null || Objects.equals(userDTO.getName(), "")) return ResponseEntity.badRequest().build();
         User user = new User(userDTO.getName());
         userService.create(user);
         return ResponseEntity.ok(user);
@@ -72,7 +74,17 @@ public class UserController {
         }
         var optionalUser = userService.findById(id);
         var optionalMovie = movieService.findById(userRentDTO.getMovieId());
+        var listMovieOfUser = rentService.findAllRentalsByUserId(id);
+
+
         if (optionalUser.isPresent() && optionalMovie.isPresent()){
+            for (Rent elem:listMovieOfUser) {
+                //if the movie we want to add is already in a rent, not accept
+                if (Objects.equals(elem.getMovieTitle(), optionalMovie.get().getTitle())){
+                    return ResponseEntity.badRequest().build();
+                }
+            }
+
             Rent newRent = new Rent(optionalMovie.get(), optionalUser.get(), userRentDTO.getStart(), userRentDTO.getEnd(), userRentDTO.getActualEnd());
             var a = rentService.create(newRent);
             optionalUser.get().rentMovie(newRent);
