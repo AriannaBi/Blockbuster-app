@@ -26,6 +26,16 @@ public class UserDTO {
         this.rentals = rentals;
     }
 
+//    for put lost movie
+
+    /**
+     * Constructor for PUT user, update the field lostMovie to true
+     * @param lostMovie if he has lost a movie
+     */
+    public UserDTO(Boolean lostMovie) {
+        this.lostMovie = lostMovie;
+    }
+
     /**
      * Constructor for creation of user and id is automatically assigned
      * @param name string name user
@@ -34,8 +44,12 @@ public class UserDTO {
         this.name = name;
     }
 
-    public boolean isLostMovie() {
+    public boolean getLostMovie() {
         return lostMovie;
+    }
+
+    public void setLostMovie(boolean lostMovie) {
+        this.lostMovie = lostMovie;
     }
 
     public ArrayList<Rent> getRentals() {

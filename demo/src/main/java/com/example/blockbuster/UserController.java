@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-//@RequestMapping()
 public class UserController {
 
     private final UserService userService;
@@ -34,6 +33,18 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    // userDTO has lostMovie as field
+    @PutMapping("/user/{id}")
+    public ResponseEntity<User> modifyLostMovieUser(@PathVariable("id") String id, @RequestBody UserDTO userDTO) {
+        var optionalUser = userService.findById(id);
+        if (optionalUser.isPresent()){
+            optionalUser.get().setLostMovie(userDTO.getLostMovie());
+            userService.create(optionalUser.get());
+            return ResponseEntity.ok(optionalUser.get());
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
     @GetMapping("/user/{id}")
     public ResponseEntity<User> findUserById(@PathVariable("id") String id) {
         var optionalUser = userService.findById(id);
@@ -47,17 +58,18 @@ public class UserController {
         return ResponseEntity.ok(listUserDTO);
     }
 
-    @PutMapping("/user/{id}")
-    public ResponseEntity<User> modifyUser(@PathVariable("id") String id, @RequestBody UserDTO userDTO) {
-        var optionalUser = userService.findById(id);
-        if (optionalUser.isPresent()){
-            optionalUser.get().setName(userDTO.getName());
-            userService.create(optionalUser.get());
-            return ResponseEntity.ok(optionalUser.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    not used
+//    @PutMapping("/user/{id}")
+//    public ResponseEntity<User> modifyNameUser(@PathVariable("id") String id, @RequestBody UserDTO userDTO) {
+//        var optionalUser = userService.findById(id);
+//        if (optionalUser.isPresent()){
+//            optionalUser.get().setName(userDTO.getName());
+//            userService.create(optionalUser.get());
+//            return ResponseEntity.ok(optionalUser.get());
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
 
     /**
@@ -124,7 +136,7 @@ public class UserController {
      * @param userReturnDTO user rent obj
      * @return return rent object
      */
-    @PostMapping("/user/{idUser}/rent/{idRent}/return")
+    @PutMapping("/user/{idUser}/rent/{idRent}")
     public ResponseEntity<Rent> returnMovie(@PathVariable("idUser") String idUser, @PathVariable("idRent") String idRent, @RequestBody UserReturnDTO userReturnDTO) {
         var optionalUser = userService.findById(idUser);
         var optionalRent = rentService.findById(idRent);

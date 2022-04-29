@@ -102,13 +102,11 @@ public class User {
     /**
      * if the user has lost a movie, the rent is end, but he still needs to pay the rent's and deposit's
      * additional fees if it was returned late.
-     * @param movie movie
-     * @param end end date of rental
-     * @return the price to pay
+     * @param lostMovie if user has lost a movie or not
      */
-    public float setLostMovie(Movie movie, LocalDate end) {
-        lostMovie = true;
-        return returnMovie(movie, end);
+    public void setLostMovie(boolean lostMovie) {
+        this.lostMovie = lostMovie;
+//        return returnMovie(movie, end);
     }
 
 
