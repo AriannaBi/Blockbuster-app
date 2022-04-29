@@ -4,15 +4,16 @@ import java.time.LocalDate;
 
 public class UserReturnDTO {
 
-    private LocalDate end;
+    private LocalDate actualEnd;
 
-    public UserReturnDTO(LocalDate start, LocalDate end) {
-        this.end = end;
+    public UserReturnDTO(LocalDate actualEnd) {
+        this.actualEnd = actualEnd;
     }
+
     public UserReturnDTO() {}
 
-    public LocalDate getEnd() {
-        return end;
+    public LocalDate getActualEnd() {
+        return actualEnd;
     }
 
 

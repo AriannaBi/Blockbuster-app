@@ -9,6 +9,7 @@
   } from "svelte-materialify";
 
   const items = [];
+  let bad_request = false;
   let date_start = new Date();
   let date_end = new Date();
   let group;
@@ -42,9 +43,9 @@
     console.log(movie_obj.id);
 
     console.log(user_id_current_url);
-    const res2 = await fetch(`http://localhost:8080/user`);
-    const user_array = await res2.json();
-    let user_obj = user_array.find((elem) => elem.id == user_id_current_url);
+    // const res2 = await fetch(`http://localhost:8080/user`);
+    // const user_array = await res2.json();
+    // let user_obj = user_array.find((elem) => elem.id == user_id_current_url);
 
     const res3 = await fetch(
       `http://localhost:8080/user/${user_id_current_url}/rent`,
@@ -58,76 +59,86 @@
         }),
       }
     );
-    const data = await res3.json();
+    const data = await res3.json().catch((error) => {
+      bad_request = true;
+    });
+    find_rent();
   }
 
   let user_name;
   async function find_user_name() {
     let user_id_current_url = document.URL.split("/")[5];
-    const res2 = await fetch(`http://localhost:8080/user/${user_id_current_url}`);
+    const res2 = await fetch(
+      `http://localhost:8080/user/${user_id_current_url}`
+    );
     const user_obj = await res2.json();
     user_name = user_obj.name;
   }
 
   find_rent();
   fetch_movie();
-  find_user_name()
-
+  find_user_name();
 
   let i;
   let actual_date_input;
-  async function change_date(idx, actual_date_end) {
-    console.log(rents)
-    // id user, id rent, end date
+  async function change_date(idx) {
+    // console.log(rents);
     let date_end_post = document.getElementById("actual_date").value;
+    // console.log(date_end_post);
     let user_id_current_url = document.URL.split("/")[5];
-    // console.log(rents[idx])
 
     const res2 = await fetch(`http://localhost:8080/user`);
     const user_array = await res2.json();
     let user_obj = user_array.find((elem) => elem.id == user_id_current_url);
 
-    // console.log(user_obj)
-    // console.log(rents)
-    // console.log(date_end_post)
+    console.log(user_id_current_url)
+    console.log(rents[idx].id)
+    console.log(date_end_post)
     const res3 = await fetch(
       `http://localhost:8080/user/${user_id_current_url}/rent/${rents[idx].id}/return`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          idUser: user_obj,
-          idRent: rents[idx],
-          end: date_end_post
+          actualEnd: date_end_post
         }),
       }
     );
     const data = await res3.json();
-    // console.log(data)
+    console.log(data)
+    find_rent()
   }
 
+  async function try_new_rent() {
+    bad_request = false;
+  }
 </script>
 
 <div id="select">
   <p>The user is {user_name}</p>
-<p>Create a new rental:</p>
-<MaterialApp>
-  
-    <!-- <Row> -->
-    <Select {items} bind:value={movie_select}>Nome</Select>
-    <!-- </Row> -->
+  <p>Create a new rental:</p>
+  {#if !bad_request}
+    <MaterialApp>
+      <Select {items} bind:value={movie_select}>Nome</Select>
 
-    <div id="date">
-      <p>Start</p>
-      <input type="date" bind:value={date_start} />
-    
-      <p>End</p>
-      <input type="date" bind:value={date_end} />
-    </div>
-  
+      <div id="date">
+        <p>Start</p>
+        <input type="date" bind:value={date_start} />
 
-  <Button on:click={create_rent}>Post it</Button>
-</MaterialApp>
+        <p>End</p>
+        <input type="date" bind:value={date_end} />
+      </div>
+
+      <Button on:click={create_rent}>Post it</Button>
+    </MaterialApp>
+  {:else}
+    <p>
+      BAD REQUEST: the starting date can not be earlier then the ending date
+    </p>
+    <MaterialApp>
+      <Button on:click={try_new_rent}>Make a new rent</Button>
+    </MaterialApp>
+  {/if}
 </div>
 
 <p id="rout">The rentals:</p>
@@ -145,9 +156,10 @@
         <th>Noleggio payed</th>
         <th>Deposito versato</th>
         <th>Vera data di fine</th>
+        <th />
         <!-- <td><a href={`#/user/${user.id}`}> {user.name}</a></td> -->
       </tr>
-      {#each rents as rent,i}
+      {#each rents as rent, i}
         <tr>
           <td><p>{rent.movie.title}</p></td>
           <td><p>{rent.start}</p></td>
@@ -155,9 +167,16 @@
           <td><p>{rent.price}</p></td>
           <td><p>{rent.deposit}</p></td>
           {#if rent.actualEnd == null}
-          <td><input id="actual_date"  type="date" on:change = {() => change_date(i)} /></td>
+            <td><input id="actual_date" type="date"  /></td>
+            <td>
+              <MaterialApp
+                ><Button on:click={() => change_date(i)}>Set the date</Button
+                ></MaterialApp
+              ></td
+            >
           {:else}
-          <td><p>{rent.actualEnd}</p></td>
+            <td><p>{rent.actualEnd}</p></td>
+            <td />
           {/if}
         </tr>
       {/each}
@@ -176,7 +195,7 @@
     justify-content: center;
     align-items: baseline;
   }
-  
+
   #select {
     margin-top: 5%;
   }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,20 +57,41 @@ public class UserController {
         }
     }
 
-//    create a rent and add it to list of rent user
+
+    /**
+     * Create a rent, add it to the rent repository and add it to the rent list of the user
+     * Input validation: start, end date should be in order and at least one day of rental
+     * @param id id user
+     * @param userRentDTO body of the post request
+     * @return the rent added
+     */
     @PostMapping("/user/{id}/rent")
     public ResponseEntity<Rent> rentMovie(@PathVariable("id") String id, @RequestBody UserRentDTO userRentDTO) {
+        if (!validDate(userRentDTO)) {
+            return ResponseEntity.badRequest().build();
+        }
         var optionalUser = userService.findById(id);
         var optionalMovie = movieService.findById(userRentDTO.getMovieId());
         if (optionalUser.isPresent() && optionalMovie.isPresent()){
-            Rent newRent = new Rent(optionalMovie.get(), optionalUser.get(), userRentDTO.getStart(), userRentDTO.getEnd(), null);
+            Rent newRent = new Rent(optionalMovie.get(), optionalUser.get(), userRentDTO.getStart(), userRentDTO.getEnd(), userRentDTO.getActualEnd());
             var a = rentService.create(newRent);
-//            faccio o pptionalUser.get().rentMovie(a); oppure optionalUser.get().rentMovie(newRent);
             optionalUser.get().rentMovie(newRent);
             userService.create(optionalUser.get());
             return ResponseEntity.ok(newRent);
         }
         return ResponseEntity.notFound().build();
+
+    }
+
+    /**
+     * Check if the start date is before the ending date, and that the two dates cannot be equal (min rental 1 day)
+     * @param userRentDTO userRent obj
+     * @return true if date is valid, otherwise false
+     */
+    public boolean validDate(UserRentDTO userRentDTO) {
+        return userRentDTO.getStart() != null && userRentDTO.getEnd() != null &&
+                !userRentDTO.getStart().isAfter(userRentDTO.getEnd()) &&
+                !userRentDTO.getStart().equals(userRentDTO.getEnd());
     }
 
     @GetMapping("/user/{id}/rent")
@@ -82,15 +104,26 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
+    /**
+     * Return a movie at a certain date
+     * Also check if the return date is later the end date don't accept it.
+     * @param idUser user id
+     * @param idRent rent id
+     * @param userReturnDTO user rent obj
+     * @return return rent object
+     */
     @PostMapping("/user/{idUser}/rent/{idRent}/return")
     public ResponseEntity<Rent> returnMovie(@PathVariable("idUser") String idUser, @PathVariable("idRent") String idRent, @RequestBody UserReturnDTO userReturnDTO) {
         var optionalUser = userService.findById(idUser);
         var optionalRent = rentService.findById(idRent);
         if (optionalUser.isPresent() && optionalRent.isPresent()){
+            if (userReturnDTO.getActualEnd() != null && userReturnDTO.getActualEnd().isBefore(optionalRent.get().getEnd())){
+                return ResponseEntity.badRequest().build();
+            }
             var movie = optionalRent.get().getMovie();
-            optionalUser.get().returnMovie(movie, userReturnDTO.getEnd());
+            optionalUser.get().returnMovie(movie, userReturnDTO.getActualEnd());
             userService.create(optionalUser.get());
-//            now that i created a user, get list of rentals of user, get list of rentals in total and match which are equal and assign id.
+//            rentService.create(optionalRent.get());
             return ResponseEntity.ok(optionalRent.get());
         }
         return ResponseEntity.notFound().build();

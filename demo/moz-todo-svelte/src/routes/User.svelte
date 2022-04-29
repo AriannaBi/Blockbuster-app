@@ -1,5 +1,12 @@
 <script>
-  import { MaterialApp, Button, Row, Col, Select, TextField } from "svelte-materialify";
+  import {
+    MaterialApp,
+    Button,
+    Row,
+    Col,
+    Select,
+    TextField,
+  } from "svelte-materialify";
   export let users = [];
   let user_name;
   let show_post_user_label = false;
@@ -12,7 +19,6 @@
     const response = await fetch("http://localhost:8080/user");
     const data = await response.json();
     users = data;
-
   }
 
   function show_inputs() {
@@ -30,6 +36,7 @@
     });
     const data = await response.json();
     appear_log_in_with_name();
+    
   }
 
   let name_;
@@ -54,33 +61,38 @@
 </script>
 
 <div id="rout">
-<Button on:click={find_user} > Find the user</Button>
-<Button on:click={show_inputs} > Create the user</Button>
-{#if find_user_label}
-  <div id="div_table_user">
-    <table id="table_users">
-      {#each users as user}
-        <tr>
-          <td><a href={`#/user/${user.id}`}> {user.name}</a></td>
-        </tr>
-      {/each}
-    </table>
-  </div>
-{/if}
+  <Button on:click={find_user}>Find the user</Button>
+  <Button on:click={show_inputs}>Create the user</Button>
 
-{#if show_post_user_label}
-  <div>
-    {#if !login_label}
-      <TextField solo bind:value={user_name}/>
-      <Button type="button" on:click={create_user}>Post it</Button>
+  {#if find_user_label}
+    {#if users.length == 0}
+      <p>List empty</p>
     {/if}
-    <br />
-    {#if login_label}
-      <a href={`#/user/${user_id}`}> Log in as {name_}</a>
-    {/if}
-  </div>
-{/if}
+    <div id="div_table_user">
+      <table id="table_users">
+        {#each users as user}
+          <tr>
+            <td><a href={`#/user/${user.id}`}> {user.name}</a></td>
+          </tr>
+        {/each}
+      </table>
+    </div>
+  {/if}
+
+  {#if show_post_user_label}
+    <div>
+      {#if !login_label}
+        <TextField solo bind:value={user_name} />
+        <Button type="button" on:click={create_user}>Post it</Button>
+      {/if}
+      <br />
+      {#if login_label}
+        <a href={`#/user/${user_id}`}> Log in as {name_}</a>
+      {/if}
+    </div>
+  {/if}
 </div>
+
 <style>
   #rout {
     margin-top: 20%;

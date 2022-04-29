@@ -3,6 +3,7 @@ package com.example.blockbuster;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -38,7 +39,6 @@ public class Rent {
     public String getId() {
         return id;
     }
-
     public LocalDate getActualEnd() {
         return actualEnd;
     }
@@ -48,22 +48,18 @@ public class Rent {
     public float getPrice() {
         return price - deposit;
     }
-
     public Movie getMovie() {
         return this.movie;
     }
-
     public LocalDate getStart() {
         return start;
     }
-
     public LocalDate getEnd() {
         return end;
     }
     public float getDeposit() {
         return deposit;
     }
-
     public void setActualEnd(LocalDate actualEnd) {
         this.actualEnd = actualEnd;
     }
@@ -82,7 +78,7 @@ public class Rent {
 
     private float getPriceRentBasedOnMovieAndTime(Movie movie) {
         long daysInBetween = daysInBetween(start, end);
-        System.out.println("DAYS IN BETWEEN" + daysInBetween);
+        System.out.println("DAYS IN BETWEEN " + start.getDayOfMonth() + end.getDayOfMonth() + daysInBetween);
         if (movie.isStandard()) {
             return 5 * daysInBetween;
         } else if (movie.isForChildren()) {

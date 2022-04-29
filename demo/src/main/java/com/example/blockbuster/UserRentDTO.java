@@ -1,5 +1,6 @@
 package com.example.blockbuster;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 public class UserRentDTO {
@@ -10,13 +11,24 @@ public class UserRentDTO {
     private LocalDate end;
     private LocalDate actualEnd;
 
-    private String idRent;
     public UserRentDTO(String movieId, String userId, LocalDate start, LocalDate end, LocalDate actualEnd) {
-        this.movieId = movieId;
-        this.userId = userId;
+//        checkDate(start,end,actualEnd);
         this.start = start;
         this.end = end;
+        this.movieId = movieId;
+        this.userId = userId;
+        this.actualEnd = actualEnd;
     }
+
+//    public void checkDate(LocalDate start, LocalDate end, LocalDate actualEnd) {
+//        if (start.isAfter(end) && actualEnd == null){
+//            this.start = start;
+//            this.end = end;
+//        } else {
+//            this.start = null;
+//            this.end = null;
+//        }
+//    }
 
 
     public UserRentDTO() {}
