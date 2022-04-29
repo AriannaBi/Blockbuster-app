@@ -67,7 +67,7 @@ public class UserTest {
     void testAddRentalToUser() {
         user1.rentMovie(rent1); //3
         user1.rentMovie(rent2); //4
-        assertEquals(2, user1.getNumberOfRentals(), "Error: adding rent to a user wrong");
+        assertEquals(2, user1.getNumberOfRentals(), "Error: adding rent to a user is wrong");
         float actualAdditionalPrice = user1.returnMovie(movie1, todayPlus3);
         assertEquals(0, actualAdditionalPrice, "Error in compute late price rent and deposit");
 

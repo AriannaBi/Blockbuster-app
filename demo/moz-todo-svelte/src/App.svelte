@@ -13,7 +13,6 @@
       <ul>
         <li><a href="#/"> Home </a></li>
         <li><a href="#/user"> Utente </a></li>
-        <li><a href="#/rent"> Lista noleggi </a></li>
         <li><a href="#/movie"> Aggiungi un film </a></li>
       </ul>
     </nav>
