@@ -26,6 +26,9 @@ public class UserTest {
     private LocalDate todayPlus3;
     private LocalDate todayPlus4;
     private LocalDate todayPlus7;
+    private Rent rent1;
+    private Rent rent2;
+    private Rent rent3;
 
 
 
@@ -44,9 +47,9 @@ public class UserTest {
         movie1 = new Movie("Men in Black", true, false, false);
         movie2 = new Movie("The Batman", false, false, true);
         movie3 = new Movie("Toy Story", true, false, false);
-//        rent1 = new Rent(movie1, user1, today, todayPlus3); //3
-//        rent2 = new Rent(movie2, user1, today, todayPlus4); //4
-//        rent3 = new Rent(movie3, user1, today, todayPlus2); //2
+        rent1 = new Rent(movie1, user1, today, todayPlus3, null); //3
+        rent2 = new Rent(movie2, user1, today, todayPlus4, null); //4
+        rent3 = new Rent(movie3, user1, today, todayPlus2, null); //2
 
 
     }
@@ -62,8 +65,8 @@ public class UserTest {
     @DisplayName("test standard movie, return in time, no lost the movie")
     @Test
     void testAddRentalToUser() {
-        user1.rentMovie(movie1, today, todayPlus3); //3
-        user1.rentMovie(movie2, today, todayPlus4); //4
+        user1.rentMovie(rent1); //3
+        user1.rentMovie(rent2); //4
         assertEquals(2, user1.getNumberOfRentals(), "Error: adding rent to a user wrong");
         float actualAdditionalPrice = user1.returnMovie(movie1, todayPlus3);
         assertEquals(0, actualAdditionalPrice, "Error in compute late price rent and deposit");
@@ -77,7 +80,7 @@ public class UserTest {
         assertFalse(user1.getLostMovie(), "Error: actually a user has never lost a movie");
 
 
-        user1.rentMovie(movie3, today, todayPlus2); //2
+        user1.rentMovie(rent3); //2
         float additionalPrice = user1.returnMovie(movie3, todayPlus2);
         assertEquals(0, additionalPrice, "Error in compute late price rent and deposit");
         Rent rent3 = user1.getRental(movie3); //2
@@ -90,8 +93,8 @@ public class UserTest {
     @DisplayName("test standard movie, return late, no lost the movie")
     @Test
     void testAddRentalToUserd() {
-        user1.rentMovie(movie1, today, todayPlus3); //3
-        user1.rentMovie(movie2, today, todayPlus4); //4
+        user1.rentMovie(rent1); //3
+        user1.rentMovie(rent2); //4
         float actualAdditionalPrice = user1.returnMovie(movie2, todayPlus7);
         Rent rent1 = user1.getRental(movie1); //3
         Rent rent2 = user1.getRental(movie2); //4

@@ -50,8 +50,13 @@ public class User {
      *  A user can rent a movie
 //     * @param rent the rent with start date, end date and movie
      */
-    public Rent rentMovie(Movie movie, LocalDate start, LocalDate end) {
-        Rent rent = new Rent(movie, this, start, end);
+//    public Rent rentMovie(Movie movie, LocalDate start, LocalDate end) {
+//        Rent rent = new Rent(movie, this, start, end);
+//        rentals.add(rent);
+//        return rent;
+//    }
+    public Rent rentMovie(Rent rent) {
+//        Rent rent = new Rent(movie, this, start, end);
         rentals.add(rent);
         return rent;
     }
@@ -63,7 +68,7 @@ public class User {
      */
     public Rent getRental(Movie movie) {
         for (Rent rent: rentals) {
-            if (Objects.equals(rent.getTitleMovie(), movie.getTitle())) {
+            if (Objects.equals(rent.getMovieTitle(), movie.getTitle())) {
                 return rent;
             }
         }
@@ -89,8 +94,10 @@ public class User {
     public float returnMovie(Movie movie, LocalDate end) {
         float additionalPrice = 0;
         for (Rent rent: rentals) {
-            if (Objects.equals(rent.getTitleMovie(), movie.getTitle())) {
-                additionalPrice += rent.computeAdditionalLatePrice(end);
+            if (Objects.equals(rent.getMovieTitle(), movie.getTitle())) {
+                rent.setActualEnd(end);
+                additionalPrice += rent.computeAdditionalLatePrice();
+
             }
         }
         return additionalPrice;

@@ -12,7 +12,7 @@
     const response = await fetch("http://localhost:8080/user");
     const data = await response.json();
     users = data;
-    // console.log(data);
+
   }
 
   function show_inputs() {

@@ -46,8 +46,6 @@
     const user_array = await res2.json();
     let user_obj = user_array.find((elem) => elem.id == user_id_current_url);
 
-    // let a = date_start;
-    // console.log(a)
     const res3 = await fetch(
       `http://localhost:8080/user/${user_id_current_url}/rent`,
       {
@@ -74,6 +72,40 @@
   find_rent();
   fetch_movie();
   find_user_name()
+
+
+  let i;
+  let actual_date_input;
+  async function change_date(idx, actual_date_end) {
+    console.log(rents)
+    // id user, id rent, end date
+    let date_end_post = document.getElementById("actual_date").value;
+    let user_id_current_url = document.URL.split("/")[5];
+    // console.log(rents[idx])
+
+    const res2 = await fetch(`http://localhost:8080/user`);
+    const user_array = await res2.json();
+    let user_obj = user_array.find((elem) => elem.id == user_id_current_url);
+
+    // console.log(user_obj)
+    // console.log(rents)
+    // console.log(date_end_post)
+    const res3 = await fetch(
+      `http://localhost:8080/user/${user_id_current_url}/rent/${rents[idx].id}/return`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          idUser: user_obj,
+          idRent: rents[idx],
+          end: date_end_post
+        }),
+      }
+    );
+    const data = await res3.json();
+    // console.log(data)
+  }
+
 </script>
 
 <div id="select">
@@ -112,16 +144,21 @@
         <th>presunta data di fine</th>
         <th>Noleggio payed</th>
         <th>Deposito versato</th>
-        <th>vera data di fine</th>
+        <th>Vera data di fine</th>
         <!-- <td><a href={`#/user/${user.id}`}> {user.name}</a></td> -->
       </tr>
-      {#each rents as rent}
+      {#each rents as rent,i}
         <tr>
           <td><p>{rent.movie.title}</p></td>
           <td><p>{rent.start}</p></td>
           <td><p>{rent.end}</p></td>
           <td><p>{rent.price}</p></td>
           <td><p>{rent.deposit}</p></td>
+          {#if rent.actualEnd == null}
+          <td><input id="actual_date"  type="date" on:change = {() => change_date(i)} /></td>
+          {:else}
+          <td><p>{rent.actualEnd}</p></td>
+          {/if}
         </tr>
       {/each}
     </table>

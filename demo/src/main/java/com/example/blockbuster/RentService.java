@@ -32,10 +32,9 @@ public class RentService {
         return rentRepository.findAll();
     }
 
-//    public List<Rent> getAllRentalsByUserId(String id) {
-//        return userRepository.findById(id);
-//        .map(User::getNumberOfRentals).orElseThrow();
-//    }
+    public List<Rent> findAllRentalsByUserId(String id) {
+        return userRepository.findById(id).map(User::getRentals).orElseThrow();
+    }
 
 
 

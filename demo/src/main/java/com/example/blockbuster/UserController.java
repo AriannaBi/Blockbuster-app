@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,31 +56,28 @@ public class UserController {
         }
     }
 
+//    create a rent and add it to list of rent user
     @PostMapping("/user/{id}/rent")
     public ResponseEntity<Rent> rentMovie(@PathVariable("id") String id, @RequestBody UserRentDTO userRentDTO) {
         var optionalUser = userService.findById(id);
         var optionalMovie = movieService.findById(userRentDTO.getMovieId());
         if (optionalUser.isPresent() && optionalMovie.isPresent()){
-            Rent rent = optionalUser.get().rentMovie(optionalMovie.get(),userRentDTO.getStart(),userRentDTO.getEnd());
+            Rent newRent = new Rent(optionalMovie.get(), optionalUser.get(), userRentDTO.getStart(), userRentDTO.getEnd(), null);
+            var a = rentService.create(newRent);
+//            faccio o pptionalUser.get().rentMovie(a); oppure optionalUser.get().rentMovie(newRent);
+            optionalUser.get().rentMovie(newRent);
             userService.create(optionalUser.get());
-            rentService.create(rent);
-//            System.out.println(rent);
-            return ResponseEntity.ok(rent);
+            return ResponseEntity.ok(newRent);
         }
         return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/user/{id}/rent")
-    public ResponseEntity<ArrayList<Rent>> getRentMovie(@PathVariable("id") String id) {
+    public ResponseEntity<List<Rent>> getRentMovie(@PathVariable("id") String id) {
         var optionalUser = userService.findById(id);
-//        System.out.println("AAA");
         if (optionalUser.isPresent()){
-            var listRent = optionalUser.get().getRentals();
-//            System.out.println(listRent.get(0));
-
+            var listRent = rentService.findAllRentalsByUserId(id);
             return ResponseEntity.ok(listRent);
-
-//            return list of rent (movie, user, start, end)
         }
         return ResponseEntity.notFound().build();
     }
@@ -92,6 +90,7 @@ public class UserController {
             var movie = optionalRent.get().getMovie();
             optionalUser.get().returnMovie(movie, userReturnDTO.getEnd());
             userService.create(optionalUser.get());
+//            now that i created a user, get list of rentals of user, get list of rentals in total and match which are equal and assign id.
             return ResponseEntity.ok(optionalRent.get());
         }
         return ResponseEntity.notFound().build();
