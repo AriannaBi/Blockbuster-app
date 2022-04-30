@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Document("rent")
 public class Rent {
@@ -29,7 +30,8 @@ public class Rent {
         this.movie = movie;
         this.price = getPriceRentBasedOnMovieAndTime(movie);
 //        System.out.println(price + " Price");
-        if (hasNotToPayInitialDeposit(movie.isStandard(), user.getlostBeforeFidelity(), user.getNumberOfRentals())) {
+//        System.out.println(movie.getTitle());
+        if (hasNotToPayInitialDeposit(user, movie.isStandard(), user.getlostBeforeFidelity(), user.getNumberOfRentals())) {
             this.deposit = 0;
         } else {
             this.deposit = computeDeposit(movie);
@@ -73,17 +75,31 @@ public class Rent {
 //     * @param movie a movie with a title and a type(standard, for children, latest released)
      * @return true if you have to pay the deposit, otherwise false
      */
-    public boolean hasNotToPayInitialDeposit(boolean isStandard, boolean haslostBeforeFidelity, int numberOfRentals) {
-        System.out.println(isStandard);
-        System.out.println(haslostBeforeFidelity);
-        System.out.println(numberOfRentals);
-        return isStandard && !haslostBeforeFidelity && numberOfRentals >= 2;
+    public boolean hasNotToPayInitialDeposit(User user, boolean isStandard, boolean haslostBeforeFidelity, int numberOfRentals) {
+//        System.out.println("---");
+//        System.out.println(haslostBeforeFidelity);
+//        System.out.println(numberOfRentals);
+
+        if (haslostBeforeFidelity) return false;
+        if (numberOfRentals == 2) if (isStandard) return true;
+        if (numberOfRentals > 2) {
+            if (isStandard) return true;
+            List<Rent> rentsMoreThan2 = user.getRentals().subList(2, user.getRentals().size());
+            for (Rent rent: rentsMoreThan2) {
+//                System.out.println(rent.getMovieTitle());
+                if (rent.getMovie().isStandard()) {
+                    return true; //not pay the deposit because there is a standard movie
+                }
+            }
+        }
+        return false;
+
+//        return !haslostBeforeFidelity && numberOfRentals >= 2;
     }
 
 
     private float getPriceRentBasedOnMovieAndTime(Movie movie) {
         long daysInBetween = daysInBetween(start, end);
-        System.out.println("DAYS IN BETWEEN " + start.getDayOfMonth() + " " + end.getDayOfMonth() + " " + daysInBetween);
         if (movie.isStandard()) {
             return 5 * daysInBetween;
         } else if (movie.isForChildren()) {
@@ -102,9 +118,11 @@ public class Rent {
      * @return how many weeks for the days
      */
     public int howManyWeeks(long days) {
-        for (int i = 0; i < days; i++) {
-            if (i <= days && days >= i + 7) {
-                return i+1;
+        int counter = 0;
+        for (int i = 0; i < days; i += 7) {
+            counter += 1;
+            if (i <= days && days <= i + 7) {
+                return counter;
             }
         }
         return -1; //error
@@ -132,16 +150,16 @@ public class Rent {
      */
     public float computeAdditionalLatePrice() {
         long lateDays = daysInBetween(end, actualEnd);
-        System.out.println("COMPUTE ADDITIONAL PRICE");
-        System.out.println("DAYS IN BETWEEN " + end.getDayOfMonth() + " " + actualEnd.getDayOfMonth() + " ");
-        System.out.println(lateDays);
+//        System.out.println("COMPUTE ADDITIONAL PRICE");
+//        System.out.println("DAYS IN BETWEEN " + end.getDayOfMonth() + " " + actualEnd.getDayOfMonth() + " ");
+//        System.out.println(lateDays);
 
         float lateRentPrice = 2 * lateDays;
         this.price += lateRentPrice;
 
         if (lateDays > 0) this.deposit = 0;//lose the deposit if the rent is late
-        System.out.println("RENT" + lateRentPrice);
-        System.out.println("deposit" + this.deposit);
+//        System.out.println("RENT" + lateRentPrice);
+//        System.out.println("deposit" + this.deposit);
         return lateRentPrice;
     }
 

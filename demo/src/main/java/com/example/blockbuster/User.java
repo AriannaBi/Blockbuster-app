@@ -88,7 +88,6 @@ public class User {
      * @return price to pay as additional fees after rent (for late return)
      */
     public float returnMovie(Movie movie, LocalDate end) {
-        System.out.println(movie.getTitle());
         for (Rent rent: rentals) {
             if (Objects.equals(rent.getMovieTitle(), movie.getTitle())) {
                 rent.setActualEnd(end);
@@ -111,12 +110,11 @@ public class User {
         //for the first 2 movies, you can always set them to lost.
         // from the third, if it's standard you can't set it as lost because you don't care
         // from the third, if it's not standard you can set it lost
-        List<Rent> rents2 = rentals.subList(0, 2); //se perde il film nei primi due noleggi, non ha la fidelity
         if (rentals.size() <= 2) {
             this.lostBeforeFidelity = true;
         } else {
             List<Rent> rentsMoreThan2 = rentals.subList(2, rentals.size()); //
-            for (Rent rent: rentsMoreThan2) {
+            for (Rent rent : rentsMoreThan2) {
                 if (!rent.getMovie().isStandard()) {
                     this.lostBeforeFidelity = true;
                 } else {
@@ -124,28 +122,7 @@ public class User {
                 }
 
             }
-//            for (int i = 0; i < rentals.size(); i++) {
-//                if (i < 2) { //i < 2
-//                    this.lostBeforeFidelity = true;
-//                } else if (!rentals.get(i).getMovie().isStandard()) { // i >= 2
-//                    this.lostBeforeFidelity = true;
-//                } else {
-//                    break;
-//                }
-//            }
         }
-
-//        System.out.println(rentals.size());
-//        var lenRents = rentals.size();
-//        for (int i = 0; i < rentals.size(); i++) {
-//            if (i < 2) { //i < 2
-//                this.lostBeforeFidelity = true;
-//            } else if (!rentals.get(i).getMovie().isStandard()) { // i >= 2
-//                this.lostBeforeFidelity = true;
-//            } else {
-//                break;
-//            }
-//        }
 
 //        this.lostBeforeFidelity = lostBeforeFidelity;
 //        return returnMovie(movie, end);

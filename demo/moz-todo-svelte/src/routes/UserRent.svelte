@@ -58,6 +58,7 @@
       bad_request = true;
     });
     find_rent();
+    // location.reload();
   }
 
   

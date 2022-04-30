@@ -58,20 +58,6 @@ public class UserController {
         return ResponseEntity.ok(listUserDTO);
     }
 
-//    not used
-//    @PutMapping("/user/{id}")
-//    public ResponseEntity<User> modifyNameUser(@PathVariable("id") String id, @RequestBody UserDTO userDTO) {
-//        var optionalUser = userService.findById(id);
-//        if (optionalUser.isPresent()){
-//            optionalUser.get().setName(userDTO.getName());
-//            userService.create(optionalUser.get());
-//            return ResponseEntity.ok(optionalUser.get());
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-
-
     /**
      * Create a rent, add it to the rent repository and add it to the rent list of the user
      * Input validation: start, end date should be in order and at least one day of rental
