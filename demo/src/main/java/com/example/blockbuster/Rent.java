@@ -28,11 +28,13 @@ public class Rent {
         this.end = end;
         this.movie = movie;
         this.price = getPriceRentBasedOnMovieAndTime(movie);
-        if (hasNotToPayInitialDeposit(movie.isStandard(), user.getLostMovie(), user.getNumberOfRentals())) {
+//        System.out.println(price + " Price");
+        if (hasNotToPayInitialDeposit(movie.isStandard(), user.getlostBeforeFidelity(), user.getNumberOfRentals())) {
             this.deposit = 0;
         } else {
             this.deposit = computeDeposit(movie);
         }
+//        System.out.println(deposit + " deposit");
         this.actualEnd = actualEnd;
     }
 
@@ -46,7 +48,7 @@ public class Rent {
         return movie.getTitle();
     }
     public float getPrice() {
-        return price - deposit;
+        return price;
     }
     public Movie getMovie() {
         return this.movie;
@@ -71,14 +73,17 @@ public class Rent {
 //     * @param movie a movie with a title and a type(standard, for children, latest released)
      * @return true if you have to pay the deposit, otherwise false
      */
-    public boolean hasNotToPayInitialDeposit(boolean isStandard, boolean hasLostMovie, int numberOfRentals) {
-        return isStandard && !hasLostMovie && numberOfRentals >= 2;
+    public boolean hasNotToPayInitialDeposit(boolean isStandard, boolean haslostBeforeFidelity, int numberOfRentals) {
+        System.out.println(isStandard);
+        System.out.println(haslostBeforeFidelity);
+        System.out.println(numberOfRentals);
+        return isStandard && !haslostBeforeFidelity && numberOfRentals >= 2;
     }
 
 
     private float getPriceRentBasedOnMovieAndTime(Movie movie) {
         long daysInBetween = daysInBetween(start, end);
-        System.out.println("DAYS IN BETWEEN " + start.getDayOfMonth() + end.getDayOfMonth() + daysInBetween);
+        System.out.println("DAYS IN BETWEEN " + start.getDayOfMonth() + " " + end.getDayOfMonth() + " " + daysInBetween);
         if (movie.isStandard()) {
             return 5 * daysInBetween;
         } else if (movie.isForChildren()) {
@@ -127,11 +132,16 @@ public class Rent {
      */
     public float computeAdditionalLatePrice() {
         long lateDays = daysInBetween(end, actualEnd);
+        System.out.println("COMPUTE ADDITIONAL PRICE");
+        System.out.println("DAYS IN BETWEEN " + end.getDayOfMonth() + " " + actualEnd.getDayOfMonth() + " ");
+        System.out.println(lateDays);
+
         float lateRentPrice = 2 * lateDays;
-//        System.out.println("laye days price" + lateRentPrice);
         this.price += lateRentPrice;
+
         if (lateDays > 0) this.deposit = 0;//lose the deposit if the rent is late
-//        System.out.println("RENT" + lateRentPrice);
+        System.out.println("RENT" + lateRentPrice);
+        System.out.println("deposit" + this.deposit);
         return lateRentPrice;
     }
 

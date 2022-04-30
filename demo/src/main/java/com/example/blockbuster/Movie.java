@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Objects;
 
-
+//CAMBIARE E METERE IL PRICE AL MOVIE E NON AL RENT
 @Document("movie")
 public class Movie {
     @Id

@@ -6,7 +6,7 @@ public class UserDTO {
 
     private String id;
     private String name;
-    private boolean lostMovie;
+    private boolean lostBeforeFidelity;
 
 
 
@@ -19,21 +19,21 @@ public class UserDTO {
      * @param id id user
      * @param name string name user
      */
-    public UserDTO(String id, String name, boolean lostMovie, ArrayList<Rent> rentals) {
+    public UserDTO(String id, String name, boolean lostBeforeFidelity, ArrayList<Rent> rentals) {
         this.id = id;
         this.name = name;
-        this.lostMovie = lostMovie;
+        this.lostBeforeFidelity = lostBeforeFidelity;
         this.rentals = rentals;
     }
 
 //    for put lost movie
 
     /**
-     * Constructor for PUT user, update the field lostMovie to true
-     * @param lostMovie if he has lost a movie
+     * Constructor for PUT user, update the field lostBeforeFidelity to true
+     * @param lostBeforeFidelity if he has lost a movie
      */
-    public UserDTO(Boolean lostMovie) {
-        this.lostMovie = lostMovie;
+    public UserDTO(Boolean lostBeforeFidelity) {
+        this.lostBeforeFidelity = lostBeforeFidelity;
     }
 
     /**
@@ -44,12 +44,12 @@ public class UserDTO {
         this.name = name;
     }
 
-    public boolean getLostMovie() {
-        return lostMovie;
+    public boolean getlostBeforeFidelity() {
+        return lostBeforeFidelity;
     }
 
-    public void setLostMovie(boolean lostMovie) {
-        this.lostMovie = lostMovie;
+    public void setlostBeforeFidelity(boolean lostBeforeFidelity) {
+        this.lostBeforeFidelity = lostBeforeFidelity;
     }
 
     public ArrayList<Rent> getRentals() {

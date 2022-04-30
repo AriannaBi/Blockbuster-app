@@ -14,13 +14,15 @@ public class User {
     @Id
     private String id;
     private String name;
-    private boolean lostMovie;
+    //lost before the third standard rent, and between 1-2 rentals
+    // name: lostBeforeFidelity
+    private boolean lostBeforeFidelity;
     private ArrayList<Rent> rentals;
 
 
     public User(String name) {
         this.name = name;
-        lostMovie = false;
+        lostBeforeFidelity = false;
         rentals = new ArrayList<>();
     }
 
@@ -42,8 +44,8 @@ public class User {
         return rentals.size();
     }
 
-    public boolean getLostMovie() {
-        return lostMovie;
+    public boolean getlostBeforeFidelity() {
+        return lostBeforeFidelity;
     }
 
     /**
@@ -86,26 +88,66 @@ public class User {
      * @return price to pay as additional fees after rent (for late return)
      */
     public float returnMovie(Movie movie, LocalDate end) {
-        float additionalPrice = 0;
+        System.out.println(movie.getTitle());
         for (Rent rent: rentals) {
             if (Objects.equals(rent.getMovieTitle(), movie.getTitle())) {
-
                 rent.setActualEnd(end);
-                System.out.println("aaaa");
-                additionalPrice += rent.computeAdditionalLatePrice();
-
+                return rent.computeAdditionalLatePrice();
             }
         }
-        return additionalPrice;
+        return 0;
     }
 
     /**
      * if the user has lost a movie, the rent is end, but he still needs to pay the rent's and deposit's
      * additional fees if it was returned late.
-     * @param lostMovie if user has lost a movie or not
+     * I can set the lost movie only in the first 2 elements
      */
-    public void setLostMovie(boolean lostMovie) {
-        this.lostMovie = lostMovie;
+    //when it get lost
+    //if you call it in the first 2 rents, it has lostfidelity
+    //if you call it after the 2 rents and it's not standard, it has lost fidelity.
+    //if you call it on the third rental standard, it should be false
+    public void setlostBeforeFidelity() {
+        //for the first 2 movies, you can always set them to lost.
+        // from the third, if it's standard you can't set it as lost because you don't care
+        // from the third, if it's not standard you can set it lost
+        List<Rent> rents2 = rentals.subList(0, 2); //se perde il film nei primi due noleggi, non ha la fidelity
+        if (rentals.size() <= 2) {
+            this.lostBeforeFidelity = true;
+        } else {
+            List<Rent> rentsMoreThan2 = rentals.subList(2, rentals.size()); //
+            for (Rent rent: rentsMoreThan2) {
+                if (!rent.getMovie().isStandard()) {
+                    this.lostBeforeFidelity = true;
+                } else {
+                    break;
+                }
+
+            }
+//            for (int i = 0; i < rentals.size(); i++) {
+//                if (i < 2) { //i < 2
+//                    this.lostBeforeFidelity = true;
+//                } else if (!rentals.get(i).getMovie().isStandard()) { // i >= 2
+//                    this.lostBeforeFidelity = true;
+//                } else {
+//                    break;
+//                }
+//            }
+        }
+
+//        System.out.println(rentals.size());
+//        var lenRents = rentals.size();
+//        for (int i = 0; i < rentals.size(); i++) {
+//            if (i < 2) { //i < 2
+//                this.lostBeforeFidelity = true;
+//            } else if (!rentals.get(i).getMovie().isStandard()) { // i >= 2
+//                this.lostBeforeFidelity = true;
+//            } else {
+//                break;
+//            }
+//        }
+
+//        this.lostBeforeFidelity = lostBeforeFidelity;
 //        return returnMovie(movie, end);
     }
 

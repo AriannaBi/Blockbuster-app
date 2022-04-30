@@ -12,9 +12,10 @@
   let bad_request = false;
   let date_start = new Date();
   let date_end = new Date();
-  let group;
-  let disabledGroup = null;
   let rents = [];
+  let user_name;
+  let user_obj;
+  
 
   async function find_rent() {
     let user_id_current_url = document.URL.split("/")[5];
@@ -23,7 +24,6 @@
     );
     const data = await response.json();
     rents = data;
-    // console.log(rents)
   }
  
 
@@ -60,28 +60,22 @@
     find_rent();
   }
 
-  let user_name;
-  let user_obj;
-  async function find_user_name() {
+  
+  async function find_user() {
     let user_id_current_url = document.URL.split("/")[5];
     const res2 = await fetch(
       `http://localhost:8080/user/${user_id_current_url}`
     );
-    let user_obj = await res2.json();
+    user_obj = await res2.json();
     user_name = user_obj.name;
-    // return user_obj;
+    user_lost_movie = user_obj.lostBeforeFidelity;
+    // console.log(user_obj)
+    return user_obj;
   }
-  //  = find_user_name()
- console.log(user_obj)
- console.log(user_name)
-
 
   async function change_date(idx) {
-    
     let date_end_post = document.getElementById("actual_date").value;
-    
     let user_id_current_url = document.URL.split("/")[5];
-
     const res2 = await fetch(`http://localhost:8080/user`);
     const user_array = await res2.json();
     let user_obj = user_array.find((elem) => elem.id == user_id_current_url);
@@ -97,7 +91,6 @@
       }
     );
     const data = await res3.json();
-    // console.log(data);
     find_rent();
   }
 
@@ -105,21 +98,24 @@
     bad_request = false;
   }
 
-  // let user_obj;
+  let user_lost_movie = false;
   async function has_lost_movie() {
+    let user_id_current_url = document.URL.split("/")[5];
     const res3 = await fetch(
       `http://localhost:8080/user/${user_id_current_url}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          lostMovie: true,
+          lostBeforeFidelity: true,
         }),
       }
     );
-    // console.log("B" + user_obj);
+    user_obj = await res3.json();
+    user_lost_movie = true;
+    location.reload();
+    // console.log(user_obj)
   }
-
 
   function reformat_date(date) {
       var day = date[2]
@@ -132,9 +128,8 @@
 
   find_rent();
   fetch_movie();
-  find_user_name();
+  find_user();
 
-  // console.log("S" + user_obj);
 </script>
 
 <div id="select">
@@ -163,12 +158,12 @@
 </div>
 
 <div>
-{#if user_obj === 'undefined'}
+{#if !user_lost_movie}
   <MaterialApp
     ><Button on:click={has_lost_movie}>Click se ha perso un film</Button>
   </MaterialApp>
 {:else}
-  <p>User ha gia perso un film</p>
+  <p>Film smarrito</p>
 {/if}
 </div>
 

@@ -33,12 +33,12 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    // userDTO has lostMovie as field
+    // userDTO has lostBeforeFidelity as field (and movie object)
     @PutMapping("/user/{id}")
-    public ResponseEntity<User> modifyLostMovieUser(@PathVariable("id") String id, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<User> modifylostBeforeFidelityUser(@PathVariable("id") String id, @RequestBody UserDTO userDTO) {
         var optionalUser = userService.findById(id);
         if (optionalUser.isPresent()){
-            optionalUser.get().setLostMovie(userDTO.getLostMovie());
+            optionalUser.get().setlostBeforeFidelity();
             userService.create(optionalUser.get());
             return ResponseEntity.ok(optionalUser.get());
         }
@@ -54,7 +54,7 @@ public class UserController {
     @GetMapping("/user")
     public ResponseEntity<List<UserDTO>> findUser() {
         List<UserDTO> listUserDTO = new ArrayList<>();
-        userService.findAll().forEach(elem -> listUserDTO.add(new UserDTO(elem.getId(), elem.getName(), elem.getLostMovie(), elem.getRentals())));
+        userService.findAll().forEach(elem -> listUserDTO.add(new UserDTO(elem.getId(), elem.getName(), elem.getlostBeforeFidelity(), elem.getRentals())));
         return ResponseEntity.ok(listUserDTO);
     }
 
