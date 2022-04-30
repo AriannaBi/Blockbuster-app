@@ -7,6 +7,13 @@
     Select,
     Radio,
   } from "svelte-materialify";
+  import {
+    DataTable,
+    DataTableHead,
+    DataTableRow,
+    DataTableCell,
+    DataTableBody,
+  } from "svelte-materialify";
 
   const items = [];
   let bad_request = false;
@@ -15,7 +22,6 @@
   let rents = [];
   let user_name;
   let user_obj;
-  
 
   async function find_rent() {
     let user_id_current_url = document.URL.split("/")[5];
@@ -25,7 +31,6 @@
     const data = await response.json();
     rents = data;
   }
- 
 
   let movie_select;
   async function fetch_movie() {
@@ -58,10 +63,8 @@
       bad_request = true;
     });
     find_rent();
-    // location.reload();
   }
 
-  
   async function find_user() {
     let user_id_current_url = document.URL.split("/")[5];
     const res2 = await fetch(
@@ -93,6 +96,7 @@
     );
     const data = await res3.json();
     find_rent();
+    // location.reload();
   }
 
   function try_new_rent() {
@@ -119,144 +123,120 @@
   }
 
   function reformat_date(date) {
-      var day = date[2]
-      date[2] = date[0]
-      date[0] = day
-      date = `${date[0]}.${date[1]}.${date[2]}`
-      return date
+    var day = date[2];
+    date[2] = date[0];
+    date[0] = day;
+    date = `${date[0]}.${date[1]}.${date[2]}`;
+    return date;
   }
-
 
   find_rent();
   fetch_movie();
   find_user();
-
 </script>
 
 <div id="select">
-  <p>The user is {user_name}</p>
-  <p>Create a new rental:</p>
+  <p>The user is <b>{user_name}</b></p>
+  <h5 class="mb-16">Crea un nuovo noleggio:</h5>
   {#if !bad_request}
     <MaterialApp>
-      <Select {items} bind:value={movie_select}>Nome</Select>
+      <div class="container mb-16">
+        <Row class="align-{1}" noGutters style="height:150px">
+          <Col>
+            <div id="select_movie">
+              <Select {items} bind:value={movie_select}>Nome</Select>
+            </div>
+          </Col>
+          <Col>
+            <p>Start</p>
+            <input type="date" bind:value={date_start} />
+            <p>End</p>
+            <input type="date" bind:value={date_end} />
 
-      <div id="date">
-        <p>Start</p>
-        <input type="date" bind:value={date_start} />
-
-        <p>End</p>
-        <input type="date" bind:value={date_end} />
+            {#if !user_lost_movie}
+             <p><Button on:click={has_lost_movie}
+                  >Click se ha perso un film</Button
+                >
+              </p>
+            
+            {:else}
+              <p>Film smarrito</p>
+            {/if}
+          </Col>
+        </Row>
       </div>
-
-      <Button on:click={create_rent}>Post it</Button>
+      <Button class="mt-10 mb-5" on:click={create_rent}>Crea il noleggio</Button>
+      <hr>
     </MaterialApp>
   {:else}
-    <p>BAD REQUEST: errore nell'inserire i dati</p>
+    <h5 id="text_bad">BAD REQUEST: errore nell'inserire i dati</h5>
     <MaterialApp>
       <Button on:click={try_new_rent}>Riprova</Button>
     </MaterialApp>
   {/if}
 </div>
 
-<div>
-{#if !user_lost_movie}
-  <MaterialApp
-    ><Button on:click={has_lost_movie}>Click se ha perso un film</Button>
-  </MaterialApp>
-{:else}
-  <p>Film smarrito</p>
-{/if}
-</div>
+<div />
 
-<p id="rout">The rentals:</p>
+<h5 class="mb-5" id="rout">The rentals:</h5>
 {#if rents.length == 0}
   <p>Your rent list is empty</p>
 {/if}
 
 {#if rents.length != 0}
-  <div id="div_table_rent">
-    <table id="table_rent">
-      <tr>
-        <th>Film</th>
-        <th>Data di inizio</th>
-        <th>presunta data di fine</th>
-        <th>Noleggio payed</th>
-        <th>Deposito versato</th>
-        <th>Vera data di fine</th>
-        <th />
-        <!-- <th /> -->
-        <!-- <td><a href={`#/user/${user.id}`}> {user.name}</a></td> -->
-      </tr>
-      {#each rents as rent, i}
-        <tr>
-          <td><p>{rent.movie.title}</p></td>
-          <!-- <td><p>{rent.start}</p></td> -->
-          <td><p>{reformat_date(rent.start)}</p></td>
-          <td><p>{reformat_date(rent.end)}</p></td>
-          <td><p>{rent.price}</p></td>
-          <td><p>{rent.deposit}</p></td>
-          {#if rent.actualEnd == null}
-            <td><input id="actual_date" type="date" /></td>
-            <td>
-              <MaterialApp
-                ><Button on:click={() => change_date(i)}>Aggiorna</Button
-                ></MaterialApp
+  <MaterialApp>
+    <DataTable>
+      <DataTableHead>
+        <DataTableRow>
+          <DataTableCell>Film</DataTableCell>
+          <DataTableCell>Inizio noleggio</DataTableCell>
+          <DataTableCell>Fine noleggio</DataTableCell>
+          <DataTableCell>Prezzo</DataTableCell>
+          <DataTableCell>Deposito</DataTableCell>
+          <DataTableCell>Data di ritorno</DataTableCell>
+          <DataTableCell />
+        </DataTableRow>
+      </DataTableHead>
+      <DataTableBody>
+        {#each rents as rent, i}
+          <DataTableRow>
+            <DataTableCell>{rent.movie.title}</DataTableCell>
+            <DataTableCell>{reformat_date(rent.start)}</DataTableCell>
+            <DataTableCell>{reformat_date(rent.end)}</DataTableCell>
+            <DataTableCell>{rent.price}</DataTableCell>
+            <DataTableCell>{rent.deposit}</DataTableCell>
+            {#if rent.actualEnd == null}
+              <DataTableCell
+                ><input id="actual_date" type="date" /></DataTableCell
               >
-            </td>
-          {:else}
-            <td><p>{reformat_date(rent.actualEnd)}</p></td>
-            <td />
-          {/if}
-          <!-- <td>
-            <MaterialApp><Button on:click={() => change_date(i)}>Ha perso il film</Button></MaterialApp>
-          </td> -->
-        </tr>
-      {/each}
-    </table>
-  </div>
+              <DataTableCell>
+                <Button on:click={() => change_date(i)}>Aggiorna</Button>
+              </DataTableCell>
+            {:else}
+              <DataTableCell>{reformat_date(rent.actualEnd)}</DataTableCell>
+            {/if}
+          </DataTableRow>
+        {/each}
+      </DataTableBody>
+    </DataTable>
+  </MaterialApp>
 {/if}
 
 <style>
   #rout {
-    margin-top: 8%;
-  }
-  #date {
-    margin-top: 2%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: baseline;
+    margin-top: 3%;
   }
 
   #select {
     margin-top: 5%;
   }
 
-  #table_rent {
-    font-family: Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 70%;
+  #select_movie {
+    width: 90%;
   }
 
-  #div_table_rent {
-    display: grid;
-    place-items: center;
-  }
-
-  #table_rent td {
-    /* border: 1px solid #ddd; */
-    padding: 4px;
-  }
-
-  th {
-    padding: 6px;
-  }
-
-  /* #table_rent tr:nth-child(even) {
-    background-color: #f2f2f2;
-  } */
-
-  #table_rent tr:hover {
-    background-color: #ddd;
+  #text_bad {
+    color: red;
+    margin-bottom: 2%;
   }
 </style>

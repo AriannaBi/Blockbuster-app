@@ -7,7 +7,15 @@
     Select,
     TextField,
   } from "svelte-materialify";
-  
+
+  import {
+    DataTable,
+    DataTableHead,
+    DataTableRow,
+    DataTableCell,
+    DataTableBody,
+  } from "svelte-materialify";
+
   export let users = [];
   let user_name;
   let show_post_user_label = false;
@@ -69,34 +77,37 @@
 </script>
 
 <div id="rout">
-  <Button on:click={find_user}>Find the user</Button>
-  <Button on:click={show_inputs}>Create the user</Button>
+  <Button class="mb-10" on:click={find_user}>Cerca un user</Button>
+  <Button class="mb-10" on:click={show_inputs}>Crea un user</Button>
 
   {#if find_user_label}
     {#if users.length == 0}
-      <p>List empty</p>
+      <h5>Lista di user vuota</h5>
     {/if}
-    <div id="div_table_user">
-      <table id="table_users">
-        {#each users as user}
-          <tr>
-            <td><a href={`#/user/${user.id}`}> {user.name}</a></td>
-          </tr>
-        {/each}
-      </table>
+    {#each users as user}
+    <div id ="class_list" class="d-flex justify-left">
+      <p id="list_user"><a href={`#/user/${user.id}`}> {user.name}</a></p>
     </div>
+    {/each}
   {/if}
 
   {#if show_post_user_label}
     {#if !bad_request}
-      <div>
+      <div class="d-flex justify-center">
         {#if !login_label}
-          <TextField solo bind:value={user_name} id="textField_id" />
-          <Button type="button" on:click={create_user}>Post it</Button>
+          <input
+            class="mt-15 elevation-{3} rounded ma-4"
+            solo
+            placeholder="Scrivi un nome utente"
+            bind:value={user_name}
+            id="textField_id"
+          />
+          <Button class="mt-16  ma-4" type="button" on:click={create_user}
+            >Crea l'utente</Button
+          >
         {/if}
-        <br />
         {#if login_label}
-          <a href={`#/user/${user_id}`}> Log in as {name_}</a>
+          <a class="mt-15" href={`#/user/${user_id}`}> <h5>Log in as {name_}</h5></a>
         {/if}
       </div>
     {:else}
@@ -110,34 +121,33 @@
 
 <style>
   #rout {
-    margin-top: 20%;
+    margin-top: 7%;
+    justify-content: center;
   }
 
-  #table_users {
-    font-family: Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
+  #class_list {
     width: 50%;
+    /* margin-top:5%; */
+    margin-left:45%
   }
 
-  #div_table_user {
-    display: grid;
-    place-items: center;
+  #list_user {
+    font-size: 120%;
+    text-align: left;
   }
-
-  #table_users td {
-    /* border: 1px solid #ddd; */
-    padding: 8px;
-  }
-
-  td.svelte-lgv1bk.svelte-lgv1bk {
-    border-bottom: 1px black;
-  }
-
-  /* #table_users tr:nth-child(even) {
-    background-color: #f2f2f2;
-  } */
-
-  #table_users tr:hover {
+  #row:hover {
     background-color: #ddd;
+  }
+
+  input {
+    border: 1px solid #ccc;
+    /* border-radius: 10; */
+    width: 40%;
+  }
+
+  ::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: black;
+    opacity: 0.5; /* Firefox */
   }
 </style>

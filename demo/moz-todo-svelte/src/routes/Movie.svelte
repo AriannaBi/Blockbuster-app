@@ -1,12 +1,26 @@
 <script>
-  import { MaterialApp, Radio, TextField, Button } from "svelte-materialify";
+  import {
+    MaterialApp,
+    Button,
+    Row,
+    Col,
+    Select,
+    Radio,
+  } from "svelte-materialify";
+  import {
+    DataTable,
+    DataTableHead,
+    DataTableRow,
+    DataTableCell,
+    DataTableBody,
+  } from "svelte-materialify";
+  import { TextField } from "svelte-materialify";
   let group = false;
   let standard;
   let children;
   let newRelease;
   let movie_name;
   let bad_request = false;
-  
 
   async function create_movie() {
     if (group == 1) {
@@ -17,7 +31,7 @@
       standard = false;
       children = false;
       newRelease = true;
-    } else if (group == 3){
+    } else if (group == 3) {
       standard = false;
       children = true;
       newRelease = false;
@@ -58,52 +72,72 @@
 </script>
 
 <div id="rout">
-  {#if !bad_request}
-    <MaterialApp>
-      <TextField solo bind:value={movie_name} />
-
-      <Radio bind:group value={1}>Standard</Radio>
-      <Radio bind:group value={2}>Nuova uscita</Radio>
-      <Radio bind:group value={3}>Per bambini</Radio>
-      <Button type="button" on:click={create_movie}>Post it</Button>
-    </MaterialApp>
-  {:else}
-    <p>BAD REQUEST: errore nell'inserire i dati</p>
-    <MaterialApp>
+  <MaterialApp>
+    {#if !bad_request}
+      <div class="container mb-16 d-flex justify-center">
+        <Row class="align-{1}" noGutters style="height:150px">
+          <Col cols={8} offset={1}>
+            <div id="div_text">
+              <TextField solo bind:value={movie_name} />
+            </div>
+          </Col>
+          <Col>
+            <Radio bind:group value={1}>Standard</Radio>
+            <Radio bind:group value={2}>Nuova uscita</Radio>
+            <Radio bind:group value={3}>Per bambini</Radio>
+          </Col>
+        </Row>
+      </div>
+      <Button class="mb-10" type="button" on:click={create_movie}
+        >Post it</Button
+      >
+      <!-- </MaterialApp> -->
+      <hr />
+    {:else}
+      <p>BAD REQUEST: errore nell'inserire i dati</p>
+      <!-- <MaterialApp> -->
       <Button on:click={try_new_movie}>Riprova</Button>
-    </MaterialApp>
-  {/if}
+    {/if}
+  </MaterialApp>
 
-  <p id="rout">The Movies:</p>
+  <h5 id="rout" class="mb-10">The Movies:</h5>
   {#if movies.length == 0}
     <p>Your Movie list is empty</p>
   {/if}
 
   {#if movies.length != 0}
-    <div id="div_table_rent">
-      <table id="table_rent">
-        <tr>
-          <th>Nome</th>
-          <th>Categoria</th>
-        </tr>
-        {#each movies as movie}
-          <tr>
-            <td><p>{movie.title}</p></td>
-            {#if movie.newReleased}
-              <td><p>Ultima Uscita</p></td>
-            {:else if movie.standard}
-              <td><p>Standard</p></td>
-            {:else}
-              <td><p>Per bambini</p></td>
-            {/if}
-          </tr>
-        {/each}
-      </table>
-    </div>
+    <MaterialApp>
+      <DataTable>
+        <DataTableHead>
+          <DataTableRow>
+            <DataTableCell>Nome</DataTableCell>
+            <DataTableCell>Categoria</DataTableCell>
+          </DataTableRow>
+        </DataTableHead>
+
+        <DataTableBody>
+          {#each movies as movie}
+            <DataTableRow>
+              <DataTableCell>{movie.title}</DataTableCell>
+              {#if movie.newReleased}
+                <DataTableCell>Ultima uscita</DataTableCell>
+              {:else if movie.standard}
+                <DataTableCell>Standard</DataTableCell>
+              {:else}
+                <DataTableCell>Per bambini</DataTableCell>
+              {/if}
+            </DataTableRow>
+          {/each}
+        </DataTableBody>
+      </DataTable>
+    </MaterialApp>
   {/if}
 </div>
 
 <style>
+  #div_text {
+    width: 90%;
+  }
   #rout {
     margin-top: 10%;
   }

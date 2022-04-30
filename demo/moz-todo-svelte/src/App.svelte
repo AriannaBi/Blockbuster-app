@@ -1,28 +1,40 @@
 <script>
   import Router from "svelte-spa-router";
   import { routes } from "./routes.js";
-  import { Menu, Button, List, ListItem, MaterialApp } from 'svelte-materialify';
+  import {
+    Menu,
+    Button,
+    List,
+    ListItem,
+    MaterialApp,
+  } from "svelte-materialify";
+  import { AppBar, Icon } from "svelte-materialify";
   export let name;
 </script>
 
 <main>
-  <h1>{name}!</h1>
+  <!-- <h1>{name}!</h1> -->
+  <!-- svelte-ignore a11y-missing-attribute -->
+  <img src="./blockbusterLogo.png" height="5%" width="30%" />
 
-  <div >
-    <nav>
-      <ul>
-        <li><a href="#/"> Home </a></li>
-        <li><a href="#/user"> Utente </a></li>
-        <li><a href="#/movie"> Aggiungi un film </a></li>
-      </ul>
-    </nav>
+  <div id = "main_menu">
+    <MaterialApp>
+      <AppBar class="d-flex justify-space-around">
+        <span class="black-text pa-2 ma-10"><a href="#/"> Overview </a></span>
+        <span class="black-text pa-2 ma-10"><a href="#/user"> Utente </a></span>
+        <span class="black-text pa-2 ma-10"><a href="#/movie"> Film </a></span>
+      </AppBar>
+    </MaterialApp>
   </div>
-  <div id = "id_routes">
+  <div id="id_routes">
     <Router {routes} />
   </div>
 </main>
 
 <style>
+  #main_menu {
+    margin-top: 3%;
+  }
   #id_routes {
     margin: auto;
     width: 90%;
@@ -32,6 +44,7 @@
     padding: 1em;
     max-width: 240px;
     margin: 0 auto;
+    
   }
 
   h1 {
@@ -41,32 +54,9 @@
     font-weight: 100;
   }
 
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+  a {
+    font-size: 120%;
   }
-
-  li {
-    float: left;
-  }
-
-  li a {
-    display: block;
-    padding: 8px;
-    /* background-color: #dddddd; */
-  }
-
-  nav {
-    margin-top: 2%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: baseline;
-  }
-
-  
 
   @media (min-width: 640px) {
     main {
