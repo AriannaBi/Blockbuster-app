@@ -91,11 +91,9 @@
       <Button class="mb-10" type="button" on:click={create_movie}
         >Post it</Button
       >
-      <!-- </MaterialApp> -->
       <hr />
     {:else}
-      <p>BAD REQUEST: errore nell'inserire i dati</p>
-      <!-- <MaterialApp> -->
+    <h5 id="text_bad">BAD REQUEST: errore nell'inserire i dati</h5>
       <Button on:click={try_new_movie}>Riprova</Button>
     {/if}
   </MaterialApp>
@@ -141,26 +139,9 @@
   #rout {
     margin-top: 10%;
   }
-  #table_rent {
-    font-family: Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 70%;
-  }
-  #div_table_rent {
-    display: grid;
-    place-items: center;
-  }
-  #table_rent td {
-    /* border: 1px solid #ddd; */
-    padding: 4px;
-  }
-  th {
-    padding: 6px;
-  }
-  /* #table_rent tr:nth-child(even) {
-    background-color: #f2f2f2;
-  } */
-  #table_rent tr:hover {
-    background-color: #ddd;
+
+  #text_bad {
+    color: red;
+    margin-bottom: 2%;
   }
 </style>

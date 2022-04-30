@@ -8,6 +8,8 @@
     MaterialApp,
   } from "svelte-materialify";
   let array_users = [];
+  let sum = 0;
+  let deposit_sum = 0;
 
   async function find_user() {
     const res2 = await fetch(`http://localhost:8080/user`);
@@ -16,6 +18,14 @@
 
     user_info.forEach((elem) => {
       array_users.push(elem);
+    });
+
+    array_users.forEach(element => {
+      element.rentals.forEach(elem => {
+        console.log(elem.price)
+        sum += elem.price;
+        deposit_sum += elem.deposit;
+      });
     });
   }
 
@@ -37,14 +47,12 @@
       <DataTableRow>
         <DataTableCell>Nome user</DataTableCell>
         <DataTableCell>Fidelity</DataTableCell>
-      <!-- <DataTableRow> -->
         <DataTableCell>Nome Film</DataTableCell>
         <DataTableCell>Data inizio</DataTableCell>
         <DataTableCell>Data fine</DataTableCell>
         <DataTableCell>Riconsegnato</DataTableCell>
         <DataTableCell>Prezzo pagato</DataTableCell>
         <DataTableCell>Deposito da restituire</DataTableCell>
-      <!-- </DataTableRow> -->
       </DataTableRow>
     </DataTableHead>
 
@@ -72,6 +80,16 @@
             </DataTableRow>
           {/each} 
       {/each}
+    <DataTableRow>
+      <DataTableCell><b>Total</b></DataTableCell>
+      <DataTableCell></DataTableCell>
+      <DataTableCell></DataTableCell>
+      <DataTableCell></DataTableCell>
+      <DataTableCell></DataTableCell>
+      <DataTableCell></DataTableCell>
+      <DataTableCell><b>{sum}</b></DataTableCell>
+      <DataTableCell><b>{deposit_sum}</b></DataTableCell>
+    </DataTableRow>
     </DataTableBody>
   </DataTable>
 </MaterialApp>
@@ -80,31 +98,5 @@
   #rout {
     margin-top: 10%;
   }
-  #table_rent {
-    font-family: Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    /* width: 70%; */
-  }
 
-  #div_table_rent {
-    display: grid;
-    place-items: center;
-  }
-
-  #table_rent td {
-    border: 1px solid #ddd;
-    padding: 4px;
-  }
-
-  th {
-    padding: 6px;
-  }
-
-  /* #table_rent tr:nth-child(even) {
-    background-color: #f2f2f2;
-  } */
-
-  #table_rent tr:hover {
-    background-color: #ddd;
-  }
 </style>

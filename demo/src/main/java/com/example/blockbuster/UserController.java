@@ -127,7 +127,6 @@ public class UserController {
         var optionalUser = userService.findById(idUser);
         var optionalRent = rentService.findById(idRent);
         if (optionalUser.isPresent() && optionalRent.isPresent()){
-//            System.out.println(userReturnDTO.getActualEnd());
             if (userReturnDTO.getActualEnd() != null && userReturnDTO.getActualEnd().isBefore(optionalRent.get().getEnd())){
                 return ResponseEntity.badRequest().build();
             }
@@ -135,7 +134,6 @@ public class UserController {
             optionalUser.get().returnMovie(movie, userReturnDTO.getActualEnd());
             System.out.println(optionalRent.get().getDeposit());
             userService.create(optionalUser.get());
-//            rentService.create(optionalRent.get());
             return ResponseEntity.ok(optionalRent.get());
         }
         return ResponseEntity.notFound().build();

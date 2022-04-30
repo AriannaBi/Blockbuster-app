@@ -46,7 +46,9 @@
     const res = await fetch(`http://localhost:8080/movie`);
     const movie_array = await res.json();
     let movie_obj = movie_array.find((elem) => elem.title == movie_select);
-
+    if (movie_obj === undefined) {
+        bad_request = true;
+    }
     const res3 = await fetch(
       `http://localhost:8080/user/${user_id_current_url}/rent`,
       {
