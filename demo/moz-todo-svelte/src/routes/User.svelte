@@ -82,7 +82,7 @@
 
   {#if find_user_label}
     {#if users.length == 0}
-      <h5>Lista di user vuota</h5>
+      <h6>La lista di user é vuota</h6>
     {/if}
     {#each users as user}
     <div id ="class_list" class="d-flex justify-left">

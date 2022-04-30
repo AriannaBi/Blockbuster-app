@@ -2,7 +2,6 @@ package com.example.blockbuster;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.data.annotation.Id;
@@ -14,74 +13,78 @@ public class User {
     @Id
     private String id;
     private String name;
-    //lost before the third standard rent, and between 1-2 rentals
-    // name: lostBeforeFidelity
+    //lostBeforeFidelity true before the third standard rent, and between 1-2 rentals
     private boolean lostBeforeFidelity;
     private ArrayList<Rent> rentals;
 
 
+    /**
+     * Constructor for User
+     * @param name String name of user
+     */
     public User(String name) {
         this.name = name;
         lostBeforeFidelity = false;
         rentals = new ArrayList<>();
     }
 
+    /**
+     * Constructor empty
+     */
     public User() {}
 
+    /**
+     * Return id user
+     * @return String id
+     */
     public String getId() {
         return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    /**
+     * Return name user
+     * @return String name user
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Return number of rentals of the user
+     * @return int number rentals
+     */
     public int getNumberOfRentals() {
         return rentals.size();
     }
 
+    /**
+     * Return if the user has lost the fidelity
+     * @return boolean lostBeforeFidelity
+     */
     public boolean getlostBeforeFidelity() {
         return lostBeforeFidelity;
     }
 
     /**
-     *  A user can rent a movie
-//     * @param rent the rent with start date, end date and movie
+     *  A user rent a movie
+     * @param rent Rent object
      */
-    public Rent rentMovie(Rent rent) {
+    public void rentMovie(Rent rent) {
         rentals.add(rent);
-        return rent;
     }
 
-    /**
-     * Return the single rental
-     * @param movie a movie
-     * @return rent
-     */
-    public Rent getRental(Movie movie) {
-        for (Rent rent: rentals) {
-            if (Objects.equals(rent.getMovieTitle(), movie.getTitle())) {
-                return rent;
-            }
-        }
-        return null;
-    }
 
     /**
-     * Return all the rentals
+     * Return all the rentals of a user
+     * @return array of rentals
      */
     public ArrayList<Rent> getRentals() {
-//        return Collections.unmodifiableList(rentals);
         return rentals;
     }
 
     /**
-     * Return to the blockbuster the movie and end the rent.
-     * Find the movie among all the rentals, compute the fee to pay if the movie was turned late,
+     * Return the movie.
+     * Find the movie among all the rentals, compute the additional fee to pay if the movie was turned late,
      * and decide to give back the deposit or not.
      * @param movie a movie
      * @param end end date of rent
@@ -100,16 +103,11 @@ public class User {
     /**
      * if the user has lost a movie, the rent is end, but he still needs to pay the rent's and deposit's
      * additional fees if it was returned late.
-     * I can set the lost movie only in the first 2 elements
+     * Example: if you call the function in first 2 rents, it has lost the fidelity.
+     * If you call the function after the 2 rents, and it's not standard, it has lost the fidelity.
+     * If you call the function on the third rent standard, has not lost fidelity
      */
-    //when it get lost
-    //if you call it in the first 2 rents, it has lostfidelity
-    //if you call it after the 2 rents and it's not standard, it has lost fidelity.
-    //if you call it on the third rental standard, it should be false
     public void setlostBeforeFidelity() {
-        //for the first 2 movies, you can always set them to lost.
-        // from the third, if it's standard you can't set it as lost because you don't care
-        // from the third, if it's not standard you can set it lost
         if (rentals.size() <= 2) {
             this.lostBeforeFidelity = true;
         } else {
@@ -123,9 +121,6 @@ public class User {
 
             }
         }
-
-//        this.lostBeforeFidelity = lostBeforeFidelity;
-//        return returnMovie(movie, end);
     }
 
 

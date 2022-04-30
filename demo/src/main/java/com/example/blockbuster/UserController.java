@@ -1,12 +1,8 @@
 package com.example.blockbuster;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,6 +14,13 @@ public class UserController {
     private final RentService rentService;
     private final MovieService movieService;
 
+
+    /**
+     * Constructor for UserController
+     * @param userService a user service
+     * @param rentService a rent service
+     * @param movieService ma movie service
+     */
     @Autowired
     public UserController(UserService userService, RentService rentService, MovieService movieService) {
         this.userService = userService;
@@ -25,6 +28,11 @@ public class UserController {
         this.movieService = movieService;
     }
 
+    /**
+     * Given a UserDTO, add the user in the user repository and return it
+     * @param userDTO a UserDTO
+     * @return the user object stored in the repo
+     */
     @PostMapping("/user")
     public ResponseEntity<User> addUser(@RequestBody UserDTO userDTO) {
         if (userDTO.getName() == null || Objects.equals(userDTO.getName(), "")) return ResponseEntity.badRequest().build();
@@ -33,7 +41,12 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    // userDTO has lostBeforeFidelity as field (and movie object)
+    /**
+     * Given a user id and a userDTO, update the user by modifying the field lostBeforeFidelityUser to true
+     * @param id user id
+     * @param userDTO userDTO
+     * @return the user updated
+     */
     @PutMapping("/user/{id}")
     public ResponseEntity<User> modifylostBeforeFidelityUser(@PathVariable("id") String id, @RequestBody UserDTO userDTO) {
         var optionalUser = userService.findById(id);
@@ -45,12 +58,21 @@ public class UserController {
         return ResponseEntity.badRequest().build();
     }
 
+    /**
+     * Given a user id find it in the repo and return it
+     * @param id user id
+     * @return the user from the repo
+     */
     @GetMapping("/user/{id}")
     public ResponseEntity<User> findUserById(@PathVariable("id") String id) {
         var optionalUser = userService.findById(id);
         return optionalUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    /**
+     * Find all the users from the user repo and return that list
+     * @return a list of UserDTO
+     */
     @GetMapping("/user")
     public ResponseEntity<List<UserDTO>> findUser() {
         List<UserDTO> listUserDTO = new ArrayList<>();
@@ -104,6 +126,11 @@ public class UserController {
                 !userRentDTO.getStart().equals(userRentDTO.getEnd());
     }
 
+    /**
+     * Given a user string, return a list of all his rents
+     * @param id user id
+     * @return a list of rent from user repo
+     */
     @GetMapping("/user/{id}/rent")
     public ResponseEntity<List<Rent>> getRentMovie(@PathVariable("id") String id) {
         var optionalUser = userService.findById(id);
@@ -115,11 +142,12 @@ public class UserController {
     }
 
     /**
-     * Return a movie at a certain date
-     * Also check if the return date is later the end date don't accept it.
+     * Given a user id, a rent id and a userRentDTO, update the rent because the user returned the movie. Hence, set the
+     * field actualDate to the return date
+     * Input validation:  check if the return date is later the end date don't accept it.
      * @param idUser user id
      * @param idRent rent id
-     * @param userReturnDTO user rent obj
+     * @param userReturnDTO user rent object
      * @return return rent object
      */
     @PutMapping("/user/{idUser}/rent/{idRent}")
@@ -132,7 +160,6 @@ public class UserController {
             }
             var movie = optionalRent.get().getMovie();
             optionalUser.get().returnMovie(movie, userReturnDTO.getActualEnd());
-            System.out.println(optionalRent.get().getDeposit());
             userService.create(optionalUser.get());
             return ResponseEntity.ok(optionalRent.get());
         }

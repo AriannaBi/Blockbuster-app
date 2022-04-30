@@ -89,7 +89,7 @@
         </Row>
       </div>
       <Button class="mb-10" type="button" on:click={create_movie}
-        >Post it</Button
+        >Aggiungi film</Button
       >
       <hr />
     {:else}
@@ -100,7 +100,7 @@
 
   <h5 id="rout" class="mb-10">The Movies:</h5>
   {#if movies.length == 0}
-    <p>Your Movie list is empty</p>
+    <h6>La lista di film é vuota</h6>
   {/if}
 
   {#if movies.length != 0}

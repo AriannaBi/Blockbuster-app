@@ -10,15 +10,22 @@ import java.util.List;
 @RestController
 public class MovieController {
 
-    //la classe é cosí semplice che in realta non mi serve un DTO ma posso usare direttamente la classe user
-
     private final MovieService movieService;
 
+    /**
+     * Constructor for MovieService
+     * @param movieService
+     */
     @Autowired
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
     }
 
+    /**
+     * Given a MovieDTO add a movie in the Movie repository
+     * @param movieDTO a MovieDTO
+     * @return the movie added
+     */
     @PostMapping("/movie")
     public ResponseEntity<Movie> addMovie(@RequestBody Movie movieDTO) {
         Movie movie = new Movie(movieDTO.getTitle(), movieDTO.isStandard(), movieDTO.isForChildren(), movieDTO.isNewReleased());
@@ -33,12 +40,21 @@ public class MovieController {
         return ResponseEntity.badRequest().build();
     }
 
+    /**
+     * Given a movie id, return that movie found in the repo
+     * @param id movie id
+     * @return a movie
+     */
     @GetMapping("/movie/{id}")
     public ResponseEntity<Movie> findMovieById(@PathVariable("id") String id) {
         var optionalMovie = movieService.findById(id);
         return optionalMovie.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    /**
+     * Find all the movie in the repository and return them
+     * @return a list of MovieDTO
+     */
     @GetMapping("/movie")
     public ResponseEntity<List<MovieDTO>> findMovie() {
         var listMovie = movieService.findAll();

@@ -11,8 +11,15 @@ public class UserRentDTO {
     private LocalDate end;
     private LocalDate actualEnd;
 
+    /**
+     * Constructor UserRentDTO
+     * @param movieId string movie id
+     * @param userId string user id
+     * @param start LocalDate starting date of rent
+     * @param end LocalDate ending date of rent
+     * @param actualEnd LocalDate of return of the movie
+     */
     public UserRentDTO(String movieId, String userId, LocalDate start, LocalDate end, LocalDate actualEnd) {
-//        checkDate(start,end,actualEnd);
         this.start = start;
         this.end = end;
         this.movieId = movieId;
@@ -20,34 +27,48 @@ public class UserRentDTO {
         this.actualEnd = actualEnd;
     }
 
-//    public void checkDate(LocalDate start, LocalDate end, LocalDate actualEnd) {
-//        if (start.isAfter(end) && actualEnd == null){
-//            this.start = start;
-//            this.end = end;
-//        } else {
-//            this.start = null;
-//            this.end = null;
-//        }
-//    }
 
-
+    /**
+     * Empty constructor
+     */
     public UserRentDTO() {}
 
+    /**
+     * Return movie id
+     * @return string movie id
+     */
     public String getMovieId() {
         return movieId;
     }
+
+    /**
+     * Return user id
+     * @return string user id
+     */
     public String getUserId() {
         return userId;
     }
 
+    /**
+     * Return start date of rent
+     * @return LocalDate start day of rent
+     */
     public LocalDate getStart() {
         return start;
     }
 
+    /**
+     * Return end date of rent
+     * @return LocalDate end day of rent
+     */
     public LocalDate getEnd() {
         return end;
     }
 
+    /**
+     * Return date of return movie
+     * @return LocalDate return day of movie
+     */
     public LocalDate getActualEnd() {
         return actualEnd;
     }

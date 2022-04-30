@@ -5,9 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-//expected, actual
 import java.time.LocalDate;
 
 @SpringBootTest
@@ -32,9 +29,6 @@ public class UserTest {
     private Rent rent3;
     private Rent rent4;
 
-
-
-
     @BeforeEach
     public void DataSetup() {
         today =  LocalDate.now();
@@ -45,14 +39,12 @@ public class UserTest {
         todayPlus6 =  today.plusDays(6);
         todayPlus7 = today.plusDays(7);
 
-//        Create user1, 2 rents and 2 movies
         user1 = new User("Arianna Bianchi");
         movie1 = new Movie("Men in Black", true, false, false);
         movie2 = new Movie("The Batman", false, false, true);
         movie3 = new Movie("Toy Story", true, false, false);
         movie4 = new Movie("Avatar", false, false, true);
 
-        //non posso creare i rent qui, ma devo crearli uno dopo l'altro perché l'user ha bisogno di una lista di rentals
     }
 
     @DisplayName("test name of user and movie")

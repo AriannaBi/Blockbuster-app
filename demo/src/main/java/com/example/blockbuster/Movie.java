@@ -1,11 +1,8 @@
 package com.example.blockbuster;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.Objects;
 
-//CAMBIARE E METERE IL PRICE AL MOVIE E NON AL RENT
 @Document("movie")
 public class Movie {
     @Id
@@ -23,33 +20,38 @@ public class Movie {
         this.newReleased = newReleased;
     }
 
-//    public Movie() {}
-
-    public float getPricePerDay() {
-        if (standard) {
-            return 5;
-        } else if (forChildren){
-            return 10;
-        } else {
-            return 7;
-        }
-    }
-
+    /**
+     * Return id movie
+     * @return string id movie
+     */
     public String getId() { return id;}
 
+    /**
+     * Return if the movie is standard
+     * @return boolean standard
+     */
     public boolean isStandard() {
         return standard;
     }
-
+    /**
+     * Return if the movie is for children
+     * @return boolean for children
+     */
     public boolean isForChildren() {
         return forChildren;
     }
-
+    /**
+     * Return title movie
+     * @return String title
+     */
     public String getTitle() {
         return title;
     }
 
-
+    /**
+     * Return if the movie is a new released
+     * @return boolean new released
+     */
     public boolean isNewReleased() {
         return newReleased;
     }
@@ -66,14 +68,5 @@ public class Movie {
         var movie = (Movie) o;
         return Objects.equals(title, movie.title) && Objects.equals(standard, movie.standard) && Objects.equals(forChildren, movie.forChildren) && Objects.equals(newReleased, movie.newReleased);
     }
-
-//    /**
-//     * @return a hashcode for the task
-//     */
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(firstName, lastName, thesisTitle);
-//    }
-
 
 }

@@ -120,7 +120,7 @@
     );
     user_obj = await res3.json();
     user_lost_movie = true;
-    location.reload();
+    // location.reload();
     // console.log(user_obj)
   }
 
@@ -138,7 +138,7 @@
 </script>
 
 <div id="select">
-  <p>The user is <b>{user_name}</b></p>
+  <p>L'utente é: <b>{user_name}</b></p>
   <h5 class="mb-16">Crea un nuovo noleggio:</h5>
   {#if !bad_request}
     <MaterialApp>
@@ -180,9 +180,9 @@
 
 <div />
 
-<h5 class="mb-5" id="rout">The rentals:</h5>
+<h5 class="mb-5" id="rout">Lista noleggi:</h5>
 {#if rents.length == 0}
-  <p>Your rent list is empty</p>
+<h6>La lista di noleggi é vuota</h6>
 {/if}
 
 {#if rents.length != 0}
