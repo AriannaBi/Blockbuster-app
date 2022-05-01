@@ -78,10 +78,10 @@
         <Row class="align-{1}" noGutters style="height:150px">
           <Col cols={8} offset={1}>
             <div id="div_text">
-              <TextField solo bind:value={movie_name} />
+              <TextField placeholder="Inserisci un film" solo bind:value={movie_name} />
             </div>
           </Col>
-          <Col>
+          <Col>            
             <Radio bind:group value={1}>Standard</Radio>
             <Radio bind:group value={2}>Nuova uscita</Radio>
             <Radio bind:group value={3}>Per bambini</Radio>

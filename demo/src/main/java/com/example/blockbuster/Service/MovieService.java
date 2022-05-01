@@ -1,5 +1,7 @@
-package com.example.blockbuster;
+package com.example.blockbuster.Service;
 
+import com.example.blockbuster.Movie;
+import com.example.blockbuster.Repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

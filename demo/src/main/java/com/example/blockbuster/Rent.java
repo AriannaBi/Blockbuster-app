@@ -16,9 +16,12 @@ public class Rent {
     private  LocalDate actualEnd;
     private float price; //initial rent and final rent
     private float deposit; //deposit to return
-    private  Movie movie;
+    private Movie movie;
 
 
+    /**
+     * Empty constructor
+     */
     public Rent() {}
 
     /**
@@ -33,8 +36,8 @@ public class Rent {
         this.start = start;
         this.end = end;
         this.movie = movie;
-        this.price = getPriceRentBasedOnMovieAndTime(movie);
-        if (hasNotToPayInitialDeposit(user, movie.isStandard(), user.getlostBeforeFidelity(), user.getNumberOfRentals())) {
+        this.price = computeInitialPriceRent(movie);
+        if (hasNotToPayInitialDeposit(user, movie.isStandard())) {
             this.deposit = 0;
         } else {
             this.deposit = computeDeposit(movie);
@@ -121,7 +124,9 @@ public class Rent {
      * If you rent 4 "children" movie, then you start not paying the rent from the first standard movie you rent
      * @return true if you have to pay the deposit, otherwise false
      */
-    public boolean hasNotToPayInitialDeposit(User user, boolean isStandard, boolean haslostBeforeFidelity, int numberOfRentals) {
+    public boolean hasNotToPayInitialDeposit(User user, boolean isStandard) {
+        var haslostBeforeFidelity = user.getlostBeforeFidelity();
+        var numberOfRentals = user.getNumberOfRentals();
         if (haslostBeforeFidelity) return false;
         if (numberOfRentals == 2) if (isStandard) return true;
         if (numberOfRentals > 2) {
@@ -144,7 +149,7 @@ public class Rent {
      * @param movie Movie rented
      * @return the rent price (without deposit)
      */
-    private float getPriceRentBasedOnMovieAndTime(Movie movie) {
+    private float computeInitialPriceRent(Movie movie) {
         long daysInBetween = daysInBetween(start, end);
         if (movie.isStandard()) {
             return 5 * daysInBetween;

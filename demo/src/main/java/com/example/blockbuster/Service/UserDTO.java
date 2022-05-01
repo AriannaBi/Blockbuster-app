@@ -1,4 +1,6 @@
-package com.example.blockbuster;
+package com.example.blockbuster.Service;
+
+import com.example.blockbuster.Rent;
 
 import java.util.ArrayList;
 

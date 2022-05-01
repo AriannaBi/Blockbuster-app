@@ -12,7 +12,18 @@ public class Movie {
     private boolean forChildren;
     private boolean newReleased;
 
+    /**
+     * Empty constructor
+     */
     public Movie() {}
+
+    /**
+     * Constructor for movie
+     * @param title string title movie
+     * @param standard boolean standard
+     * @param forChildren boolean for children
+     * @param newReleased boolean new released
+     */
     public Movie(String title, boolean standard, boolean forChildren, boolean newReleased) {
         this.title = title;
         this.standard = standard;

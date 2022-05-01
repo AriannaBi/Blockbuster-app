@@ -1,5 +1,6 @@
-package com.example.blockbuster;
+package com.example.blockbuster.Repositories;
 
+import com.example.blockbuster.Movie;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.example.blockbuster;
+package com.example.blockbuster.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;

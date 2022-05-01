@@ -1,6 +1,8 @@
-package com.example.blockbuster;
+package com.example.blockbuster.Service;
 
 
+import com.example.blockbuster.User;
+import com.example.blockbuster.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

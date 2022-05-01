@@ -47,7 +47,7 @@
     const movie_array = await res.json();
     let movie_obj = movie_array.find((elem) => elem.title == movie_select);
     if (movie_obj === undefined) {
-        bad_request = true;
+      bad_request = true;
     }
     const res3 = await fetch(
       `http://localhost:8080/user/${user_id_current_url}/rent`,
@@ -139,6 +139,7 @@
 
 <div id="select">
   <p>L'utente é: <b>{user_name}</b></p>
+
   <h5 class="mb-16">Crea un nuovo noleggio:</h5>
   {#if !bad_request}
     <MaterialApp>
@@ -154,21 +155,12 @@
             <input type="date" bind:value={date_start} />
             <p>End</p>
             <input type="date" bind:value={date_end} />
-
-            {#if !user_lost_movie}
-             <p><Button on:click={has_lost_movie}
-                  >Click se ha perso un film</Button
-                >
-              </p>
-            
-            {:else}
-              <p>Film smarrito</p>
-            {/if}
           </Col>
         </Row>
       </div>
-      <Button class="mt-10 mb-5" on:click={create_rent}>Crea il noleggio</Button>
-      <hr>
+      <Button class="mb-5" on:click={create_rent}>Crea il noleggio</Button
+      >
+      <hr />
     </MaterialApp>
   {:else}
     <h5 id="text_bad">BAD REQUEST: errore nell'inserire i dati</h5>
@@ -178,11 +170,17 @@
   {/if}
 </div>
 
-<div />
-
 <h5 class="mb-5" id="rout">Lista noleggi:</h5>
+{#if !user_lost_movie}
+  <Button  class="mb-5" on:click={has_lost_movie}
+    >Click se ha smarrito un film</Button
+  >
+{:else}
+  <p><b>Ha smarrito un film</b></p>
+{/if}
+
 {#if rents.length == 0}
-<h6>La lista di noleggi é vuota</h6>
+  <h6>La lista di noleggi é vuota</h6>
 {/if}
 
 {#if rents.length != 0}

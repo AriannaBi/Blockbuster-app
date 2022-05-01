@@ -1,11 +1,12 @@
-package com.example.blockbuster;
+package com.example.blockbuster.controllers;
 
+import com.example.blockbuster.Rent;
+import com.example.blockbuster.Service.RentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class RentController {

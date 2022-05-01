@@ -53,6 +53,8 @@
   }
   async function try_new_rent() {
     bad_request = false;
+
+    location.reload()
   }
 
   let name_;
@@ -111,7 +113,7 @@
         {/if}
       </div>
     {:else}
-      <p>BAD REQUEST: errore nell'inserire i dati</p>
+    <h5 id="text_bad">BAD REQUEST: errore nell'inserire i dati</h5>
       <MaterialApp>
         <Button on:click={try_new_rent}>Riprova</Button>
       </MaterialApp>
@@ -135,8 +137,9 @@
     font-size: 120%;
     text-align: left;
   }
-  #row:hover {
-    background-color: #ddd;
+  #text_bad {
+    color: red;
+    margin-bottom: 2%;
   }
 
   input {

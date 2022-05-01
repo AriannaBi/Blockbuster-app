@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -29,7 +30,7 @@ public class User {
     }
 
     /**
-     * Constructor empty
+     * Empty constructor
      */
     public User() {}
 

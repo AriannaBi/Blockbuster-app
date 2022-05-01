@@ -1,5 +1,8 @@
-package com.example.blockbuster;
+package com.example.blockbuster.controllers;
 
+import com.example.blockbuster.Movie;
+import com.example.blockbuster.Service.MovieDTO;
+import com.example.blockbuster.Service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
